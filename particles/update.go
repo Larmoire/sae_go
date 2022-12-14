@@ -6,12 +6,17 @@ package particles
 // projet.
 // C'est à vous de développer cette fonction.
 func (s *System) Update() {
-
+	var compteurParticule float64
 	e := s.Content.Front()
 	for e != nil {
 		e.Value.(*Particle).PositionX += e.Value.(*Particle).SpeedX
 		e.Value.(*Particle).PositionY += e.Value.(*Particle).SpeedY
 
 		e = e.Next()
+	}
+	compteurParticule += e.Value.(*Particle).SpawnRate
+	for compteurParticule >= 1 {
+		s.Content.PushFront(createParticule())
+		compteurParticule -= 1
 	}
 }
