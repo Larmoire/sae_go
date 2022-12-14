@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"project-particles/assets"
 	"project-particles/config"
 	"project-particles/particles"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 // Draw se charge d'afficher à l'écran l'état actuel du système de particules
