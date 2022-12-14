@@ -2,6 +2,7 @@ package particles
 
 import (
 	"container/list"
+	"math/rand"
 	"project-particles/config"
 )
 
@@ -12,10 +13,19 @@ import (
 // centre de l'écran.
 func NewSystem() System {
 	l := list.New()
+	var PosX float64
+	var PosY float64
+	if !config.General.RandomSpawn {
+		PosX = float64(config.General.SpawnX)
+		PosY = float64(config.General.SpawnY)
+	} else {
+		PosX = float64(rand.Intn(config.General.WindowSizeX))
+		PosY = float64(rand.Intn(config.General.WindowSizeY))
+	}
 	for i := 0; i < (config.General.InitNumParticles); i++ {
 		l.PushFront(&Particle{
-			PositionX: float64(config.General.WindowSizeX) / 2,
-			PositionY: float64(config.General.WindowSizeY) / 2,
+			PositionX: PosX,
+			PositionY: PosY,
 			ScaleX:    1, ScaleY: 1,
 			ColorRed: 1, ColorGreen: 1, ColorBlue: 1,
 			Opacity: 0.5,
