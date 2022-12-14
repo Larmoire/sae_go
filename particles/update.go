@@ -7,4 +7,11 @@ package particles
 // C'est à vous de développer cette fonction.
 func (s *System) Update() {
 
+	e := s.Content.Front()
+	for e != nil {
+		e.Value.(*Particle).PositionX += e.Value.(*Particle).SpeedX
+		e.Value.(*Particle).PositionY += e.Value.(*Particle).SpeedY
+
+		e = e.Next()
+	}
 }

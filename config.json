@@ -4,10 +4,13 @@
   	"WindowSizeY": 600,
 	"ParticleImage": "assets/particle.png",
 	"Debug": true,
-	"InitNumParticles": 69,
+	"InitNumParticles": 5000,
 	"RandomSpawn": true,
 	"SpawnX": 700,
 	"SpawnY": 500,
-	"SpawnRate": 1
-
+	"SpawnRate": 1,
+	"SpeedXmin": -3,
+	"SpeedXmax": 3,
+	"SpeedYmin": -3,
+	"SpeedYmax": 3
 }

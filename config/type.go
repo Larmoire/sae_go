@@ -16,6 +16,10 @@ type Config struct {
 	RandomSpawn              bool
 	SpawnX, SpawnY           int
 	SpawnRate                float64
+	SpeedXmin                float64
+	SpeedXmax                float64
+	SpeedYmin                float64
+	SpeedYmax                float64
 }
 
 var General Config
