@@ -20,6 +20,9 @@ type Config struct {
 	SpeedXmax                float64
 	SpeedYmin                float64
 	SpeedYmax                float64
+	Gravity                  bool
+	GravityVal               float64
+	Lifespan                 float64
 }
 
 var General Config
