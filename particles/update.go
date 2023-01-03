@@ -4,6 +4,8 @@ import (
 	"math/rand"
 	"project-particles/config"
 	"time"
+
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // Update mets à jour l'état du système de particules (c'est-à-dire l'état de
@@ -13,9 +15,21 @@ import (
 // C'est à vous de développer cette fonction.
 
 var spawnrate float64 = config.General.SpawnRate //On peut tester avec 0.17 pour avoir environ 1 particule par seconde
+var col float64
 
 func (s *System) Update() {
 	X = s.Content.Len()
+	// Si toutes les particules sont mortes, vider la liste
+	countdead := 0
+	for e := s.Content.Front(); e != nil; e = e.Next() {
+		p := e.Value.(*Particle)
+		if dead(p) {
+			countdead += 1
+		}
+	}
+	if countdead == s.Content.Len() {
+		s.Content.Init()
+	}
 	rand.Seed(time.Now().UnixNano())
 	e := s.Content.Front()
 
@@ -26,31 +40,52 @@ func (s *System) Update() {
 		if e.Value.(*Particle).Lifespan != -1 {
 			decreaseLife(e.Value.(*Particle))
 		}
-		if dead(e.Value.(*Particle)) {
-			//La mettre à la fin
-			e.Value.(*Particle).Opacity = 0
-			s.Content.MoveToBack(e)
+		if config.General.Optimisation {
+			if dead(e.Value.(*Particle)) {
+				//La mettre à la fin
+				e.Value.(*Particle).Opacity = 0
+				s.Content.MoveToBack(e)
+			}
+		} else {
+			if dead(e.Value.(*Particle)) {
+				e.Value.(*Particle).Opacity = 0
+			}
 		}
+
 		e = e.Next()
 	}
-
-	if spawnrate < 1 {
-		spawnrateadd()
-	} else {
-		for spawnrate >= 1 {
-			if dead(s.Content.Back().Value.(*Particle)) {
-				s.Content.Back().Value = createParticule()
-			} else {
-				s.Content.PushBack(createParticule())
-				NbPart++
+	if config.General.SpawnAtMouse {
+		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+			count()
+			for i := 0; i < config.General.SpawnPerClick; i++ {
+				s.Content.PushFront(createParticule())
 			}
-			NbPart += 1
-			spawnrate--
+		} else {
+			col = 0
+		}
+	} else {
+		if spawnrate < 1 {
+			spawnrateadd()
+		} else {
+			for spawnrate >= 1 {
+				if config.General.Optimisation {
+					if dead(s.Content.Back().Value.(*Particle)) {
+						s.Content.Back().Value = createParticule()
+					} else {
+						s.Content.PushFront(createParticule())
+					}
+					spawnrate--
+				} else {
+					s.Content.PushFront(createParticule())
+					spawnrate--
+				}
+			}
 		}
 	}
+
 }
-func GetNbPart() int {
-	return NbPart
+func count() {
+	col += 0.01
 }
 func GetLen() int {
 	return X
