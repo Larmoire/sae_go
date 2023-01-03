@@ -15,22 +15,21 @@ import (
 var spawnrate float64 = config.General.SpawnRate //On peut tester avec 0.17 pour avoir environ 1 particule par seconde
 
 func (s *System) Update() {
-
+	X = s.Content.Len()
 	rand.Seed(time.Now().UnixNano())
-
 	e := s.Content.Front()
 
 	for e != nil {
 
 		upPosition(e.Value.(*Particle))
 
-		decreaseLife(e.Value.(*Particle))
-
+		if e.Value.(*Particle).Lifespan != -1 {
+			decreaseLife(e.Value.(*Particle))
+		}
 		if dead(e.Value.(*Particle)) {
-			e.Value.(*Particle).Lifespan = 0
+			//La mettre à la fin
 			e.Value.(*Particle).Opacity = 0
-			NbPart -= 1
-			s.Content.Remove(e)
+			s.Content.MoveToBack(e)
 		}
 		e = e.Next()
 	}
@@ -39,7 +38,12 @@ func (s *System) Update() {
 		spawnrateadd()
 	} else {
 		for spawnrate >= 1 {
-			s.Content.PushFront(createParticule())
+			if dead(s.Content.Back().Value.(*Particle)) {
+				s.Content.Back().Value = createParticule()
+			} else {
+				s.Content.PushBack(createParticule())
+				NbPart++
+			}
 			NbPart += 1
 			spawnrate--
 		}
@@ -47,6 +51,9 @@ func (s *System) Update() {
 }
 func GetNbPart() int {
 	return NbPart
+}
+func GetLen() int {
+	return X
 }
 func spawnrateadd() {
 	spawnrate += config.General.SpawnRate
@@ -89,4 +96,7 @@ func decreaseOpacity(p *Particle) {
 }
 func increaseOpacity(p *Particle) {
 	p.Opacity += 1 / config.General.Lifespan
+	if p.Lifespan == 0 {
+		p.Opacity = 0
+	}
 }

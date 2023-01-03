@@ -20,6 +20,7 @@ var Speedx float64
 var Speedy float64
 
 var NbPart int
+var X int
 
 func NewSystem() System {
 	rand.Seed(time.Now().UnixNano())
@@ -40,11 +41,11 @@ func createParticule() *Particle {
 		PositionY: PosY,
 		ScaleX:    config.General.ScaleX, ScaleY: config.General.ScaleY,
 		ColorRed: config.General.ColorRed, ColorGreen: config.General.ColorGreen, ColorBlue: config.General.ColorBlue,
-		Opacity:   config.General.Opacity,
-		SpeedX:    Speedx,
-		SpeedY:    Speedy,
-		SpawnRate: config.General.SpawnRate,
-		Lifespan:  config.General.Lifespan,
+		Opacity: config.General.Opacity,
+		SpeedX:  Speedx,
+		SpeedY:  Speedy,
+
+		Lifespan: config.General.Lifespan,
 	})
 	return ParticuleAMettre
 }

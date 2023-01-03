@@ -18,7 +18,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 
 	for e := g.system.Content.Front(); e != nil; e = e.Next() {
 		p, ok := e.Value.(*particles.Particle)
-		if p.Lifespan > 0 {
+		if p.Lifespan > 0 || p.Lifespan == -1 {
 			if ok {
 				options := ebiten.DrawImageOptions{}
 				options.GeoM.Rotate(p.Rotation)
@@ -33,6 +33,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 	if config.General.Debug {
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(ebiten.ActualTPS()), 0, 0)
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(particles.GetNbPart()), 0, 10)
+		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(particles.GetLen()), 0, 20)
 	}
 
 }
