@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"math/rand"
 	"project-particles/config"
+	"time"
 )
 
 // NewSystem est une fonction qui initialise un système de particules et le
@@ -18,11 +19,15 @@ var PosY float64
 var Speedx float64
 var Speedy float64
 
+var NbPart int
+
 func NewSystem() System {
+	rand.Seed(time.Now().UnixNano())
 	l := list.New()
 	for i := 0; i < (config.General.InitNumParticles); i++ {
 		l.PushFront(createParticule())
 	}
+	NbPart = config.General.InitNumParticles
 	return System{Content: l}
 }
 
@@ -33,9 +38,9 @@ func createParticule() *Particle {
 	ParticuleAMettre = (&Particle{
 		PositionX: PosX,
 		PositionY: PosY,
-		ScaleX:    1, ScaleY: 1,
-		ColorRed: 1, ColorGreen: 0.5, ColorBlue: 0.5,
-		Opacity:   1,
+		ScaleX:    config.General.ScaleX, ScaleY: config.General.ScaleY,
+		ColorRed: config.General.ColorRed, ColorGreen: config.General.ColorGreen, ColorBlue: config.General.ColorBlue,
+		Opacity:   config.General.Opacity,
 		SpeedX:    Speedx,
 		SpeedY:    Speedy,
 		SpawnRate: config.General.SpawnRate,

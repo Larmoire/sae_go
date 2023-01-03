@@ -26,51 +26,67 @@ func (s *System) Update() {
 
 		decreaseLife(e.Value.(*Particle))
 
-		if outwindows(e.Value.(*Particle)) {
+		if dead(e.Value.(*Particle)) {
+			e.Value.(*Particle).Lifespan = 0
+			e.Value.(*Particle).Opacity = 0
+			NbPart -= 1
 			s.Content.Remove(e)
 		}
 		e = e.Next()
 	}
 
-	for spawnrate >= 1 {
-		s.Content.PushFront(createParticule())
-		spawnrate--
-	}
-
 	if spawnrate < 1 {
 		spawnrateadd()
+	} else {
+		for spawnrate >= 1 {
+			s.Content.PushFront(createParticule())
+			NbPart += 1
+			spawnrate--
+		}
 	}
-
 }
-
+func GetNbPart() int {
+	return NbPart
+}
 func spawnrateadd() {
 	spawnrate += config.General.SpawnRate
 }
 
+func dead(p *Particle) bool {
+	return (outwindows(p) || outLife(p))
+}
+
 func outwindows(p *Particle) bool {
-	if p.PositionX > float64(config.General.WindowSizeX) || p.PositionX < 0 || p.PositionY > float64(config.General.WindowSizeY) || p.PositionY < 0 {
+	if p.PositionX > float64(config.General.WindowSizeX) || p.PositionX < 0-10*config.General.ScaleX || p.PositionY > float64(config.General.WindowSizeY) || p.PositionY < 0-10*config.General.ScaleY {
 		return true
 	}
 	return false
 }
+func outLife(p *Particle) bool {
+	return p.Lifespan == 0
+}
 
 func upPosition(p *Particle) {
 	p.PositionX += p.SpeedX
-	p.PositionY += p.SpeedY
 	if config.General.Gravity {
-		p.PositionY += config.General.GravityVal
+		p.SpeedY += config.General.GravityVal
 	}
+	p.PositionY += p.SpeedY
 
 }
 
 func decreaseLife(p *Particle) {
 	p.Lifespan -= 1
-	decreaseOpacity(p)
+	if config.General.Opacity == 1 {
+		decreaseOpacity(p)
+	} else {
+		increaseOpacity(p)
+	}
 }
 
 func decreaseOpacity(p *Particle) {
 	p.Opacity -= 1 / config.General.Lifespan
 }
 func increaseOpacity(p *Particle) {
-	p.Opacity += 0.005
+	p.Opacity += 1 / config.General.Lifespan
 }

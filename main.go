@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
 	"log"
 	"project-particles/assets"
 	"project-particles/config"
 	"project-particles/particles"
+
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // main est la fonction principale du projet. Elle commence par lire le fichier
@@ -21,6 +22,7 @@ func main() {
 
 	ebiten.SetWindowTitle(config.General.WindowTitle)
 	ebiten.SetWindowSize(config.General.WindowSizeX, config.General.WindowSizeY)
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	g := game{system: particles.NewSystem()}
 
