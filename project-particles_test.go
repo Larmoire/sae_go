@@ -9,7 +9,7 @@ import (
 
 func TestSpawn(t *testing.T) {
 
-	config.Get("config_part4.json")
+	config.Get("config.json")
 	Particles := particles.NewSystem()
 
 	//On vérifie que les particules sont bien créées
@@ -20,7 +20,7 @@ func TestSpawn(t *testing.T) {
 
 func TestOnScreen(t *testing.T) {
 
-	config.Get("config_part4.json")
+	config.Get("config.json")
 	Particles := particles.NewSystem()
 
 	for e := Particles.Content.Front(); e != nil; e = e.Next() {
@@ -48,7 +48,7 @@ func TestOnScreen(t *testing.T) {
 
 func TestSpawnRate(t *testing.T) {
 	
-	config.Get("config_part4.json")
+	config.Get("config.json")
 	Particles := particles.NewSystem()
 	Particles.Update()
 	//Vérification que le nombre de particules est bien égal à InitNumParticles + SpawnRate au bout d'un update si SpawnRate > 1
@@ -77,7 +77,7 @@ func TestSpawnRate(t *testing.T) {
 
 func TestSpeed(t *testing.T) {
 
-	config.Get("config_part4.json")
+	config.Get("config.json")
 	Particles := particles.NewSystem()
 	//On créée un tableau contenant les positions des particules avant l'update
 	var tabPos [][]float64

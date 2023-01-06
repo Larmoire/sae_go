@@ -14,23 +14,15 @@ type Config struct {
 	Debug                           bool
 	InitNumParticles                int
 	RandomSpawn                     bool
-	SpawnAtMouse                    bool
 	ScaleX, ScaleY                  float64
 	SpawnX, SpawnY                  int
 	ColorRed, ColorGreen, ColorBlue float64
 	SpawnRate                       float64
-	SpawnPerClick                   int
 	SpeedXmin                       float64
 	SpeedXmax                       float64
 	SpeedYmin                       float64
 	SpeedYmax                       float64
-	Gravity                         bool
-	GravityVal                      float64
-	Lifespan                        float64
 	Opacity                         float64
-	Optimisation                    bool
-	Fade                            bool
-	RVBchange 					 	bool
 }
 
 var General Config
