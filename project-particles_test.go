@@ -8,12 +8,20 @@ import (
 
 
 func TestSpawn(t *testing.T) {
+
 	config.Get("config4.json")
 	Particles := particles.NewSystem()
+	
 	//On vérifie que les particules sont bien créées
 	if Particles.Content.Len() != config.General.InitNumParticles {
 		t.Errorf("Spawn failed, got: %d, want: %d.", Particles.Content.Len(), config.General.InitNumParticles)
 	}
+}
+
+func TestOnScreen(t *testing.T) {
+
+	config.Get("config4.json")
+	Particles := particles.NewSystem()
 
 	for e := Particles.Content.Front(); e != nil; e = e.Next() {
 		if !config.General.RandomSpawn {
