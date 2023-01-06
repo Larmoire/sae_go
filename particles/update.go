@@ -19,23 +19,7 @@ var col float64
 
 func (s *System) Update() {
 	X = s.Content.Len()
-	//Si la barre espace est appuyée, toutes les particules s'éloignent de la souris, plus elles sont proches, plus elles s'éloignent vite
-	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		for e := s.Content.Front(); e != nil; e = e.Next() {
-			p := e.Value.(*Particle)
-			MouseX, MouseY := ebiten.CursorPosition()
-			if p.PositionX > float64(MouseX) {
-				p.SpeedX += 0.1
-			} else {
-				p.SpeedX -= 0.1
-			}
-			if p.PositionY > float64(MouseY) {
-				p.SpeedY += 0.1
-			} else {
-				p.SpeedY -= 0.1
-			}
-		}
-	}
+
 	//On compte le nombre de particules mortes de la liste
 	countdead := 0
 	for e := s.Content.Front(); e != nil; e = e.Next() {
@@ -44,7 +28,6 @@ func (s *System) Update() {
 			countdead += 1
 		}
 	}
-
 	//On reset la liste si toutes les particules sont mortes
 	if countdead == s.Content.Len() {
 		s.Content.Init()
@@ -99,7 +82,7 @@ func (s *System) Update() {
 			//On génère SpawnPerClick particules à la position de la souris
 			for i := 0; i < config.General.SpawnPerClick; i++ {
 				if col < 1 || !config.General.Fade {
-					s.Content.PushFront(createParticule())
+					s.Content.PushFront(CreateParticule())
 				}
 			}
 
@@ -120,13 +103,13 @@ func (s *System) Update() {
 			for spawnrate >= 1 {
 				if config.General.Optimisation {
 					if dead(s.Content.Back().Value.(*Particle)) {
-						s.Content.Back().Value = createParticule()
+						s.Content.Back().Value = CreateParticule()
 					} else {
-						s.Content.PushFront(createParticule())
+						s.Content.PushFront(CreateParticule())
 					}
 					spawnrate--
 				} else {
-					s.Content.PushFront(createParticule())
+					s.Content.PushFront(CreateParticule())
 					spawnrate--
 				}
 			}

@@ -33,14 +33,14 @@ func NewSystem() System {
 	rand.Seed(time.Now().UnixNano())
 	l := list.New()
 	for i := 0; i < (config.General.InitNumParticles); i++ {
-		l.PushFront(createParticule())
+		l.PushFront(CreateParticule())
 	}
 	NbPart = config.General.InitNumParticles
 	return System{Content: l}
 }
 
 //Fonction pour générer une particule
-func createParticule() *Particle {
+func CreateParticule() *Particle {
 	var ParticuleAMettre *Particle
 	//On définit les variables vitesse
 	setSpeed()
@@ -66,22 +66,21 @@ func createParticule() *Particle {
 func setSpeed() {
 	Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
 	Speedy = rand.Float64()*(config.General.SpeedYmax-config.General.SpeedYmin) + config.General.SpeedYmin
-
 }
 func setColor() {
 	//Si le fade est activé, on définit la couleur en fonction de col, la durée du click
-	if config.General.Fade {
-		Red = config.General.ColorRed - col
-		Green = config.General.ColorGreen - col
-		Blue = config.General.ColorBlue - col
-		//Si le fade n'est pas activé, on change les couleur en fonction des touches rvb du clavier
-	} else if ebiten.IsKeyPressed(ebiten.KeyR) {
-		Red -= 0.0001
-	} else if ebiten.IsKeyPressed(ebiten.KeyV) {
-		Green -= 0.0001
-	} else if ebiten.IsKeyPressed(ebiten.KeyB) {
-		Blue -= 0.0001
-	}
+		if config.General.Fade {
+			Red = config.General.ColorRed - col
+			Green = config.General.ColorGreen - col
+			Blue = config.General.ColorBlue - col
+			//Si le fade n'est pas activé, on change les couleur en fonction des touches rvb du clavier si RVBchange est activé
+		} else if ebiten.IsKeyPressed(ebiten.KeyR) && config.General.RVBchange {
+			Red -= 0.0001
+		} else if ebiten.IsKeyPressed(ebiten.KeyV) && config.General.RVBchange {
+			Green -= 0.0001
+		} else if ebiten.IsKeyPressed(ebiten.KeyB) && config.General.RVBchange {
+			Blue -= 0.0001
+		}
 }
 func setSpawn() {
 	//Si randomspawn est true, on définit la position de la particule aléatoirement

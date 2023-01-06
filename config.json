@@ -25,5 +25,6 @@
 	"Lifespan" : -1,
 	"Opacity" : 1,
 	"Optimisation" : false,
-	"Fade" : false
+	"Fade" : false,
+	"RVBchange" : false
 }

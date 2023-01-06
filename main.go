@@ -17,11 +17,12 @@ import (
 // régulière.
 func main() {
 
-	config.Get("config.json")
+	config.Get("config4.json")
 	assets.Get()
 
 	ebiten.SetWindowTitle(config.General.WindowTitle)
 	ebiten.SetWindowSize(config.General.WindowSizeX, config.General.WindowSizeY)
+	//Ajout de la possibilité de resize la fenêtre
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	g := game{system: particles.NewSystem()}

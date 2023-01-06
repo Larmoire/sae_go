@@ -30,6 +30,7 @@ type Config struct {
 	Opacity                         float64
 	Optimisation                    bool
 	Fade                            bool
+	RVBchange 					 	bool
 }
 
 var General Config
