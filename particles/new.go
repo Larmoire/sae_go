@@ -73,28 +73,37 @@ func setColor() {
 			Red = config.General.ColorRed - col
 			Green = config.General.ColorGreen - col
 			Blue = config.General.ColorBlue - col
-			//Si le fade n'est pas activé, on change les couleur en fonction des touches rvb du clavier si RVBchange est activé
-		} else if ebiten.IsKeyPressed(ebiten.KeyR) && config.General.RVBchange {
-			Red -= 0.0001
-		} else if ebiten.IsKeyPressed(ebiten.KeyV) && config.General.RVBchange {
-			Green -= 0.0001
-		} else if ebiten.IsKeyPressed(ebiten.KeyB) && config.General.RVBchange {
-			Blue -= 0.0001
+		} else if config.General.RVBchange {
+		//Changement de la couleur en fonction des touches du clavier
+			if ebiten.IsKeyPressed(ebiten.KeyR) {
+				Red -= 0.0001
+			} 
+			if ebiten.IsKeyPressed(ebiten.KeyV) {
+				Green -= 0.0001
+			}
+			if ebiten.IsKeyPressed(ebiten.KeyB) {
+				Blue -= 0.0001
+			}
+		} else {
+		//Sinon, on définit la couleur en fonction du config
+			Red = config.General.ColorRed
+			Green = config.General.ColorGreen
+			Blue = config.General.ColorBlue
 		}
 }
 func setSpawn() {
-	//Si randomspawn est true, on définit la position de la particule aléatoirement
 	if config.General.RandomSpawn {
+		//Si randomspawn est true, on définit la position de la particule aléatoirement
 		PosX = rand.Float64() * (float64(config.General.WindowSizeX) - 2)
 		PosY = rand.Float64() * (float64(config.General.WindowSizeY) - 2)
-		//Sinon, on regarde si SpawnAtMouse est false pour mettre une position fixe du config
-	} else if !config.General.SpawnAtMouse {
-		PosX = float64(config.General.SpawnX)
-		PosY = float64(config.General.SpawnY)
-		//Sinon, on la met à la position de la souris
-	} else {
+	} else if config.General.SpawnAtMouse {
+		//Sinon, on regarde si SpawnAtMouse est activé pour mettre la position à celle de la souris
 		acX, acY = ebiten.CursorPosition()
 		PosX = float64(acX)
 		PosY = float64(acY)
+	} else {
+		//Sinon, on la met à une valeur fixe du config
+		PosX = float64(config.General.SpawnX)
+		PosY = float64(config.General.SpawnY)
 	}
 }

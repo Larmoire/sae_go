@@ -31,6 +31,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 	}
 
 	if config.General.Debug {
+		//Si le debug est actif, on affiche les fps et la longeur de la liste de particules
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(ebiten.ActualTPS()), 0, 0)
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(particles.GetLen()), 0, 10)
 	}

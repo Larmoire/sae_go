@@ -28,8 +28,8 @@ func (s *System) Update() {
 			countdead += 1
 		}
 	}
-	//On reset la liste si toutes les particules sont mortes
-	if countdead == s.Content.Len() {
+	//On reset la liste si toutes les particules sont mortes ou si on appuie sur Tab
+	if countdead == s.Content.Len() || ebiten.IsKeyPressed(ebiten.KeyTab)  {
 		s.Content.Init()
 	}
 
