@@ -13,11 +13,18 @@
 	"ColorBlue": 1,
 	"SpawnX": 400,
 	"SpawnY": 200,
-	"SpawnRate": 0.016,
-	"_comment": "SpawnRate de 0.016 permet d'avoir environ 1 particules par secondes",
+	"SpawnRate": 0.2,
 	"SpeedXmin": -1,
 	"SpeedXmax": 1,
 	"SpeedYmin": -1,
 	"SpeedYmax": 1,
-	"Opacity" : 1
+	"Lifespan" : -1,
+	"Opacity" : 1,
+    "Gravity": false,
+    "GravityVal" : 0.1,
+	"Optimisation" : false,
+	"Fade" : true,
+    "SpawnAtMouse": true,
+    "SpawnPerClick": 20,
+    "RVBchange" : false
 }
