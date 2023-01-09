@@ -12,8 +12,8 @@
 	"ColorGreen": 1,
 	"ColorBlue": 1,
 	"SpawnX": 400,
-	"SpawnY": 200,
-	"SpawnRate": 0.4,
+	"SpawnY": 300,
+	"SpawnRate": 0,
 	"RandomSpeed": false,
 	"SpeedX": 5,
 	"SpeedY": 5,	
@@ -29,7 +29,8 @@
 	"Fade" : true,
     "SpawnAtMouse": true,
     "SpawnPerClick": 20,
-    "RVBchange" : false,
+    "RVBchange" : true,
 	"Bounce" : false,
-	"ColorBounce" : false
+	"ColorBounce" : false,
+	"Orbital" : true
 }

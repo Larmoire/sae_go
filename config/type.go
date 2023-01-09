@@ -35,6 +35,7 @@ type Config struct {
 	RVBchange                       bool
 	Bounce                          bool
 	ColorBounce                     bool
+	Orbital                         bool
 }
 
 var General Config

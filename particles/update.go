@@ -1,6 +1,7 @@
 package particles
 
 import (
+	"math"
 	"math/rand"
 	"project-particles/config"
 	"time"
@@ -44,7 +45,13 @@ func (s *System) Update() {
 	for e != nil {
 
 		//On fait avancer la particule
-		upPosition(e.Value.(*Particle))
+		if config.General.Orbital {
+			//On fait avancer la particule en mode orbital
+			updateOrbit(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, -(2*math.Pi - 1))
+			rotateParticle(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, -(2*math.Pi - 1))
+		} else {
+			upPosition(e.Value.(*Particle))
+		}
 
 		//Si le lifespan est activé, on enlève 1 à la durée de vie de la particule
 		if e.Value.(*Particle).Lifespan != -1 {
@@ -135,6 +142,36 @@ func (s *System) Update() {
 		}
 	}
 }
+
+func rotateParticle(particle *Particle, centerX, centerY, angle float64) {
+	// Calcule la distance entre le centre de rotation et la particule
+	distance := math.Sqrt(math.Pow(particle.PositionX-centerX, 2) + math.Pow(particle.PositionY-centerY, 2))
+
+	// Calcule l'angle actuel de la particule par rapport au centre de rotation
+	currentAngle := math.Atan2(particle.PositionY-centerY, particle.PositionX-centerX)
+
+	// Applique la rotation à l'angle actuel de la particule
+	newAngle := currentAngle + angle
+
+	// Calcule les nouvelles coordonnées de la particule en utilisant la distance et l'angle mis à jour
+	particle.PositionX = centerX + distance*math.Cos(newAngle)
+	particle.PositionY = centerY + distance*math.Sin(newAngle)
+}
+func updateOrbit(particle *Particle, centerX, centerY, orbitSpeed float64) {
+	// Calcule la distance entre le centre de l'orbite et la particule
+	distance := math.Sqrt(math.Pow(particle.PositionX-centerX, 2) + math.Pow(particle.PositionY-centerY, 2))
+
+	// Calcule l'angle actuel de la particule par rapport au centre de l'orbite
+	currentAngle := math.Atan2(particle.PositionY-centerY, particle.PositionX-centerX)
+
+	// Met à jour l'angle de la particule en fonction de la vitesse d'orbite
+	newAngle := currentAngle + orbitSpeed
+
+	// Calcule les nouvelles coordonnées de la particule en utilisant la distance et l'angle mis à jour
+	particle.PositionX = centerX + distance*math.Cos(newAngle)
+	particle.PositionY = centerY + distance*math.Sin(newAngle)
+}
+
 func bounce(p *Particle) {
 	//la faire rebondir sur les bords
 	if p.PositionX <= 0 || p.PositionX >= float64(config.General.WindowSizeX)-10*config.General.ScaleX {
