@@ -64,8 +64,14 @@ func CreateParticule() *Particle {
 
 //La vitesse est aléatoire entre les valeurs min et max
 func setSpeed() {
-	Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
-	Speedy = rand.Float64()*(config.General.SpeedYmax-config.General.SpeedYmin) + config.General.SpeedYmin
+	if config.General.RandomSpeed {
+		Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
+		Speedy = rand.Float64()*(config.General.SpeedYmax-config.General.SpeedYmin) + config.General.SpeedYmin
+	} else {
+		Speedx = config.General.SpeedX
+		Speedy = config.General.SpeedY
+	}
+
 }
 func setColor() {
 	//Si le fade est activé, on définit la couleur en fonction de col, la durée du click
@@ -94,8 +100,8 @@ func setColor() {
 func setSpawn() {
 	if config.General.RandomSpawn {
 		//Si randomspawn est true, on définit la position de la particule aléatoirement
-		PosX = rand.Float64() * (float64(config.General.WindowSizeX) - 2)
-		PosY = rand.Float64() * (float64(config.General.WindowSizeY) - 2)
+		PosX = rand.Float64() * ((float64(config.General.WindowSizeX)) - 10*config.General.ScaleX)
+		PosY = rand.Float64() * ((float64(config.General.WindowSizeY)) - 10*config.General.ScaleY)
 	} else {
 		//Sinon, on la met à une valeur fixe du config
 		PosX = float64(config.General.SpawnX)

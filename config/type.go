@@ -20,6 +20,8 @@ type Config struct {
 	ColorRed, ColorGreen, ColorBlue float64
 	SpawnRate                       float64
 	SpawnPerClick                   int
+	RandomSpeed                     bool
+	SpeedX, SpeedY                  float64
 	SpeedXmin                       float64
 	SpeedXmax                       float64
 	SpeedYmin                       float64
@@ -30,7 +32,9 @@ type Config struct {
 	Opacity                         float64
 	Optimisation                    bool
 	Fade                            bool
-	RVBchange 					 	bool
+	RVBchange                       bool
+	Bounce                          bool
+	ColorBounce                     bool
 }
 
 var General Config

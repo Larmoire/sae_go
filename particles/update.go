@@ -61,10 +61,12 @@ func (s *System) Update() {
 			}
 
 			//Et si elle n'est pas activée, on met son opacité à 0 uniquement si elle est morte
-		} else {
+		} else if !config.General.Bounce {
 			if dead(e.Value.(*Particle)) {
 				e.Value.(*Particle).Opacity = 0
 			}
+		} else {
+			bounce(e.Value.(*Particle))
 		}
 
 		//On passe à la particule suivante
@@ -110,6 +112,41 @@ func (s *System) Update() {
 					spawnrate--
 				}
 			}
+		}
+	} else {
+		if spawnrate < 1 {
+			spawnrateadd()
+		} else {
+
+			//Sinon, on génère SpawnRate particules
+			for spawnrate >= 1 {
+				if config.General.Optimisation {
+					if dead(s.Content.Back().Value.(*Particle)) {
+						s.Content.Back().Value = CreateParticule()
+					} else {
+						s.Content.PushFront(CreateParticule())
+					}
+					spawnrate--
+				} else {
+					s.Content.PushFront(CreateParticule())
+					spawnrate--
+				}
+			}
+		}
+	}
+}
+func bounce(p *Particle) {
+	//la faire rebondir sur les bords
+	if p.PositionX <= 0 || p.PositionX >= float64(config.General.WindowSizeX)-10*config.General.ScaleX {
+		p.SpeedX = -p.SpeedX
+		if config.General.ColorBounce {
+			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
+		}
+	}
+	if p.PositionY <= 0 || p.PositionY >= float64(config.General.WindowSizeY)-10*config.General.ScaleY {
+		p.SpeedY = -p.SpeedY
+		if config.General.ColorBounce {
+			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
 		}
 	}
 }
