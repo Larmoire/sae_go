@@ -21,6 +21,7 @@ type Config struct {
 	SpawnRate                       float64
 	SpawnPerClick                   int
 	RandomSpeed                     bool
+	SpeedFix                        bool
 	SpeedX, SpeedY                  float64
 	SpeedXmin                       float64
 	SpeedXmax                       float64

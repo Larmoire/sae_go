@@ -17,8 +17,60 @@ import (
 
 var spawnrate float64 = config.General.SpawnRate //On peut tester avec 0.017 pour avoir environ 1 particule par seconde
 var col float64
+var buttonPressed bool
 
 func (s *System) Update() {
+
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+		x, y := ebiten.CursorPosition()
+		if x >= 0 && x <= 110 && y >= 0 && y <= 30 {
+			if !buttonPressed {
+				buttonPressed = true
+				Gravity = !Gravity
+			}
+		}
+		if x >= 0 && x <= 110 && y >= 40 && y <= 70 {
+			if !buttonPressed {
+				buttonPressed = true
+				Bounce = !Bounce
+				if !Bounce {
+					ColorBounce = false
+				}
+			}
+		}
+		if x >= 135 && x <= 245 && y >= 40 && y <= 70 && Bounce {
+			if !buttonPressed {
+				buttonPressed = true
+				ColorBounce = !ColorBounce
+			}
+		}
+		if x >= 0 && x <= 110 && y >= 80 && y <= 110 {
+			if !buttonPressed {
+				buttonPressed = true
+				RandomSpeed = !RandomSpeed
+			}
+		}
+		if x >= 0 && x <= 110 && y >= 120 && y <= 150 {
+			if !buttonPressed {
+				buttonPressed = true
+				RVBchange = !RVBchange
+			}
+		}
+		if x >= 0 && x <= 110 && y >= 160 && y <= 190 {
+			if !buttonPressed {
+				buttonPressed = true
+				SpawnAtMouse = !SpawnAtMouse
+			}
+		}
+		if x >= 0 && x <= 110 && y >= 200 && y <= 230 {
+			if !buttonPressed {
+				buttonPressed = true
+				SpeedFix = !SpeedFix
+			}
+		}
+	} else {
+		buttonPressed = false
+	}
 
 	X = s.Content.Len()
 
@@ -47,8 +99,8 @@ func (s *System) Update() {
 		//On fait avancer la particule
 		if config.General.Orbital {
 			//On fait avancer la particule en mode orbital
-			updateOrbit(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, -(2*math.Pi - 1))
-			rotateParticle(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, -(2*math.Pi - 1))
+			updateOrbit(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, 5)
+			rotateParticle(e.Value.(*Particle), float64(config.General.WindowSizeX)/2, float64(config.General.WindowSizeY)/2, 5)
 		} else {
 			upPosition(e.Value.(*Particle))
 		}
@@ -68,7 +120,7 @@ func (s *System) Update() {
 			}
 
 			//Et si elle n'est pas activée, on met son opacité à 0 uniquement si elle est morte
-		} else if !config.General.Bounce {
+		} else if !Bounce {
 			if dead(e.Value.(*Particle)) {
 				e.Value.(*Particle).Opacity = 0
 			}
@@ -81,8 +133,8 @@ func (s *System) Update() {
 	}
 
 	//On regarde si l'option SpawnAtMouse est activée
-	if config.General.SpawnAtMouse {
-
+	if SpawnAtMouse {
+		setColor()
 		//On génère une particule à la position de la souris si le click gauche est enfoncé
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 
@@ -101,25 +153,6 @@ func (s *System) Update() {
 			col = 0
 		}
 		//Si le SpawnRate est inférieur à 1, alors on le garde en mémoire et on l'ajoute à un compteur, pour par exemple générer une particules tout les deux updates (pour 0.5 par exemple)
-		if spawnrate < 1 {
-			spawnrateadd()
-		} else {
-
-			//Sinon, on génère SpawnRate particules
-			for spawnrate >= 1 {
-				if config.General.Optimisation {
-					if dead(s.Content.Back().Value.(*Particle)) {
-						s.Content.Back().Value = CreateParticule()
-					} else {
-						s.Content.PushFront(CreateParticule())
-					}
-					spawnrate--
-				} else {
-					s.Content.PushFront(CreateParticule())
-					spawnrate--
-				}
-			}
-		}
 	} else {
 		if spawnrate < 1 {
 			spawnrateadd()
@@ -142,7 +175,30 @@ func (s *System) Update() {
 		}
 	}
 }
-
+func UpdateLenList(i int) {
+	X += i
+}
+func GetSpeedFixState() bool {
+	return SpeedFix
+}
+func GetSpawnAtMouseState() bool {
+	return SpawnAtMouse
+}
+func GetRandomSpeedState() bool {
+	return RandomSpeed
+}
+func GetBounceState() bool {
+	return Bounce
+}
+func GetGravityState() bool {
+	return Gravity
+}
+func GetColorBounceState() bool {
+	return ColorBounce
+}
+func GetRVBChangeState() bool {
+	return RVBchange
+}
 func rotateParticle(particle *Particle, centerX, centerY, angle float64) {
 	// Calcule la distance entre le centre de rotation et la particule
 	distance := math.Sqrt(math.Pow(particle.PositionX-centerX, 2) + math.Pow(particle.PositionY-centerY, 2))
@@ -174,15 +230,15 @@ func updateOrbit(particle *Particle, centerX, centerY, orbitSpeed float64) {
 
 func bounce(p *Particle) {
 	//la faire rebondir sur les bords
-	if p.PositionX <= 0 || p.PositionX >= float64(config.General.WindowSizeX)-10*config.General.ScaleX {
+	if p.PositionX <= 0 || p.PositionX+p.SpeedX+10*config.General.ScaleX >= float64(config.General.WindowSizeX) {
 		p.SpeedX = -p.SpeedX
-		if config.General.ColorBounce {
+		if ColorBounce {
 			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
 		}
 	}
-	if p.PositionY <= 0 || p.PositionY >= float64(config.General.WindowSizeY)-10*config.General.ScaleY {
+	if p.PositionY <= 0 || p.PositionY+p.SpeedY+10*config.General.ScaleY >= float64(config.General.WindowSizeY) {
 		p.SpeedY = -p.SpeedY
-		if config.General.ColorBounce {
+		if ColorBounce {
 			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
 		}
 	}
@@ -205,11 +261,11 @@ func spawnrateadd() {
 
 //Check si la particule est morte
 func dead(p *Particle) bool {
-	return (outwindows(p) || outLife(p))
+	return (Outwindows(p) || outLife(p))
 }
 
 //Renvoie true si la particule sort complétement de l'écran
-func outwindows(p *Particle) bool {
+func Outwindows(p *Particle) bool {
 	if p.PositionX > float64(config.General.WindowSizeX) || p.PositionX < 0-10*config.General.ScaleX || p.PositionY > float64(config.General.WindowSizeY) || p.PositionY < 0-10*config.General.ScaleY {
 		return true
 	}
@@ -223,13 +279,18 @@ func outLife(p *Particle) bool {
 
 //Augmente la position de la particule
 func upPosition(p *Particle) {
-	p.PositionX += p.SpeedX
-	//Si la particule est en mode gravity, on augmente sa vitesse en y
-	if config.General.Gravity {
-		p.SpeedY += config.General.GravityVal
+	if !SpeedFix {
+		p.PositionX += p.SpeedX
+		//Si la particule est en mode gravity, on augmente sa vitesse en y
+		if Gravity {
+			p.SpeedY += config.General.GravityVal
+		}
+		if Bounce && Gravity && (p.PositionY+p.SpeedY+10*config.General.ScaleY >= float64(config.General.WindowSizeY)) {
+			p.SpeedY = 0
+			p.SpeedX = 0
+		}
+		p.PositionY += p.SpeedY
 	}
-	p.PositionY += p.SpeedY
-
 }
 
 //Réduit le lifespan de la particule

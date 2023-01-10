@@ -29,11 +29,30 @@ var X int
 
 var Red, Green, Blue float64
 
+var Gravity bool
+var Bounce bool
+var ColorBounce bool
+var RandomSpeed bool
+var RVBchange bool
+var SpeedFix bool
+var SpawnAtMouse bool
+
 func NewSystem() System {
+
+	Gravity = config.General.Gravity
+	Bounce = config.General.Bounce
+	ColorBounce = config.General.ColorBounce
+	RandomSpeed = config.General.RandomSpeed
+	RVBchange = config.General.RVBchange
+	SpeedFix = config.General.SpeedFix
+	SpawnAtMouse = config.General.SpawnAtMouse
+
 	rand.Seed(time.Now().UnixNano())
 	l := list.New()
 	for i := 0; i < (config.General.InitNumParticles); i++ {
-		l.PushFront(CreateParticule())
+		if !GetSpawnAtMouseState() {
+			l.PushFront(CreateParticule())
+		}
 	}
 	NbPart = config.General.InitNumParticles
 	return System{Content: l}
@@ -64,7 +83,7 @@ func CreateParticule() *Particle {
 
 //La vitesse est aléatoire entre les valeurs min et max
 func setSpeed() {
-	if config.General.RandomSpeed {
+	if GetRandomSpeedState() {
 		Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
 		Speedy = rand.Float64()*(config.General.SpeedYmax-config.General.SpeedYmin) + config.General.SpeedYmin
 	} else {
@@ -79,16 +98,22 @@ func setColor() {
 		Red = config.General.ColorRed - col
 		Green = config.General.ColorGreen - col
 		Blue = config.General.ColorBlue - col
-	} else if config.General.RVBchange {
+	} else if GetRVBChangeState() {
 		//Changement de la couleur en fonction des touches du clavier
 		if ebiten.IsKeyPressed(ebiten.KeyR) {
-			Red -= 0.0001
+			Red, Green, Blue = 1, 0, 0
 		}
-		if ebiten.IsKeyPressed(ebiten.KeyV) {
-			Green -= 0.0001
+		if ebiten.IsKeyPressed(ebiten.KeyG) {
+			Red, Green, Blue = 0, 1, 0
 		}
 		if ebiten.IsKeyPressed(ebiten.KeyB) {
-			Blue -= 0.0001
+			Red, Green, Blue = 0, 0, 1
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyY) {
+			Red, Green, Blue = 1, 1, 0
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyC) {
+			Red, Green, Blue = 0, 1, 1
 		}
 	} else {
 		//Sinon, on définit la couleur en fonction du config
