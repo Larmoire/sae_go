@@ -3,6 +3,7 @@ package particles
 import (
 	"container/list"
 	"math/rand"
+	pictures "project-particles/Extension/Pictures"
 	"project-particles/config"
 	"time"
 
@@ -14,6 +15,8 @@ import (
 // C'est à vous de développer cette fonction.
 // Dans sa version actuelle, cette fonction affiche une particule blanche au
 // centre de l'écran.
+
+// Fonction présente : NewSystem, CreateParticule, setSpeed, setColor, setSpawn
 
 var acX int
 var acY int
@@ -33,9 +36,11 @@ var Gravity bool
 var Bounce bool
 var ColorBounce bool
 var RandomSpeed bool
-var RVBchange bool
+var RGBchange bool
 var SpeedFix bool
 var SpawnAtMouse bool
+
+var NombreDeParticules int = config.General.InitNumParticles
 
 func NewSystem() System {
 
@@ -43,22 +48,52 @@ func NewSystem() System {
 	Bounce = config.General.Bounce
 	ColorBounce = config.General.ColorBounce
 	RandomSpeed = config.General.RandomSpeed
-	RVBchange = config.General.RVBchange
+	RGBchange = config.General.RGBchange
 	SpeedFix = config.General.SpeedFix
 	SpawnAtMouse = config.General.SpawnAtMouse
 
-	rand.Seed(time.Now().UnixNano())
 	l := list.New()
-	for i := 0; i < (config.General.InitNumParticles); i++ {
-		if !GetSpawnAtMouseState() {
+
+	if config.General.Pictures != "" {
+
+		h, w, image := pictures.Gettabpixels()
+		rand.Seed(time.Now().UnixNano())
+		for k := 0; k < len(image); k++ {
+			l := rand.Intn(len(image))
+			image[k], image[l] = image[l], image[k]
+		}
+
+		precision := 10.0
+		NombreDeParticules = h * w
+
+		config.General.ScaleX = config.General.ScaleX / precision
+		config.General.ScaleY = config.General.ScaleY / precision
+
+		for i := 0; i < NombreDeParticules; i++ {
+			NbPart += 1
 			l.PushFront(CreateParticule())
+			l.Front().Value.(*Particle).CibleX, l.Front().Value.(*Particle).CibleY = float64(image[i][0])*config.General.ScaleX*precision, float64(image[i][1])*config.General.ScaleY*precision
+			l.Front().Value.(*Particle).ColorRed, l.Front().Value.(*Particle).ColorGreen, l.Front().Value.(*Particle).ColorBlue = float64(image[i][2])/255, float64(image[i][3])/255, float64(image[i][4])/255
+			l.Front().Value.(*Particle).Opacity = float64(image[i][5]) / 255
+			if config.General.Spawnimg {
+				l.Front().Value.(*Particle).PositionX, l.Front().Value.(*Particle).PositionY = l.Front().Value.(*Particle).CibleX, l.Front().Value.(*Particle).CibleY
+
+			}
+		}
+
+	} else {
+
+		rand.Seed(time.Now().UnixNano())
+		for i := 0; i < (config.General.InitNumParticles); i++ {
+			if !GetSpawnAtMouseState() {
+				l.PushFront(CreateParticule())
+			}
 		}
 	}
-	NbPart = config.General.InitNumParticles
 	return System{Content: l}
 }
 
-//Fonction pour générer une particule
+// Fonction pour générer une particule
 func CreateParticule() *Particle {
 	var ParticuleAMettre *Particle
 	//On définit les variables vitesse
@@ -77,11 +112,13 @@ func CreateParticule() *Particle {
 		SpeedX:   Speedx,
 		SpeedY:   Speedy,
 		Lifespan: config.General.Lifespan,
+		CibleX:   float64(PosX),
+		CibleY:   float64(PosY),
 	})
 	return ParticuleAMettre
 }
 
-//La vitesse est aléatoire entre les valeurs min et max
+// La vitesse est aléatoire entre les valeurs min et max
 func setSpeed() {
 	if GetRandomSpeedState() {
 		Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
@@ -98,22 +135,25 @@ func setColor() {
 		Red = config.General.ColorRed - col
 		Green = config.General.ColorGreen - col
 		Blue = config.General.ColorBlue - col
-	} else if GetRVBChangeState() {
+	} else if GetRGBChangeState() {
 		//Changement de la couleur en fonction des touches du clavier
-		if ebiten.IsKeyPressed(ebiten.KeyR) {
+		if ebiten.IsKeyPressed(ebiten.KeyR) { //Rouge en pressant R
 			Red, Green, Blue = 1, 0, 0
 		}
-		if ebiten.IsKeyPressed(ebiten.KeyG) {
+		if ebiten.IsKeyPressed(ebiten.KeyG) { //Vert en pressant G
 			Red, Green, Blue = 0, 1, 0
 		}
-		if ebiten.IsKeyPressed(ebiten.KeyB) {
+		if ebiten.IsKeyPressed(ebiten.KeyB) { //Bleu en pressant B
 			Red, Green, Blue = 0, 0, 1
 		}
-		if ebiten.IsKeyPressed(ebiten.KeyY) {
+		if ebiten.IsKeyPressed(ebiten.KeyY) { //Jaune en pressant Y
 			Red, Green, Blue = 1, 1, 0
 		}
-		if ebiten.IsKeyPressed(ebiten.KeyC) {
+		if ebiten.IsKeyPressed(ebiten.KeyC) { //Cyan en pressant C
 			Red, Green, Blue = 0, 1, 1
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyP) { //Violet en pressant P
+			Red, Green, Blue = 1, 0, 1
 		}
 	} else {
 		//Sinon, on définit la couleur en fonction du config
@@ -132,7 +172,7 @@ func setSpawn() {
 		PosX = float64(config.General.SpawnX)
 		PosY = float64(config.General.SpawnY)
 	}
-	if config.General.SpawnAtMouse && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+	if SpawnAtMouse && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 		//Sinon, on regarde si SpawnAtMouse est activé pour mettre la position à celle de la souris
 		acX, acY = ebiten.CursorPosition()
 		PosX = float64(acX)

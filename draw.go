@@ -16,6 +16,8 @@ import (
 // la bibliothèque Ebiten. Cette fonction pourra être légèrement modifiée quand
 // c'est précisé dans le sujet.
 
+//fonction présente : Draw, DrawGravity, DrawBounce, DrawRandomSpeed, DrawRGB, DrawSpawnAtMouse, DrawSpeedFix
+
 func (g *game) Draw(screen *ebiten.Image) {
 
 	for e := g.system.Content.Front(); e != nil; e = e.Next() {
@@ -41,7 +43,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		DrawGravity(screen)
 		DrawBounce(screen)
 		DrawRandomSpeed(screen)
-		DrawRVB(screen)
+		DrawRGB(screen)
 		DrawSpawnAtMouse(screen)
 		DrawSpeedFix(screen)
 
@@ -109,20 +111,20 @@ func DrawRandomSpeed(screen *ebiten.Image) {
 		ebitenutil.DebugPrintAt(screen, "RandomSpeed: Off", 6, 85)
 	}
 }
-func DrawRVB(screen *ebiten.Image) {
+func DrawRGB(screen *ebiten.Image) {
 
 	button := ebiten.NewImage(110, 30)
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
 	op := &ebiten.DrawImageOptions{}
 
-	if particles.GetRVBChangeState() {
+	if particles.GetRGBChangeState() {
 		op.GeoM.Translate(0, 120)
 		screen.DrawImage(button, op)
-		ebitenutil.DebugPrintAt(screen, "RVB: On", 6, 125)
+		ebitenutil.DebugPrintAt(screen, "RGB: On", 6, 125)
 	} else {
 		op.GeoM.Translate(0, 120)
 		screen.DrawImage(button, op)
-		ebitenutil.DebugPrintAt(screen, "RVB: Off", 6, 125)
+		ebitenutil.DebugPrintAt(screen, "RGB: Off", 6, 125)
 	}
 }
 func DrawSpawnAtMouse(screen *ebiten.Image) {

@@ -15,6 +15,9 @@ import (
 // projet.
 // C'est à vous de développer cette fonction.
 
+//fonction présente : Update,UpdateLenList, GetSpeedFixState, GetSpawnAtMouseState, GetRandomSpeedState, GetBounceState, GetGravityState, GetColorBounceState,
+//GetRGBChangeState, rotateParticle, updateOrbit,bounce, count, GetLen, spawnrateadd, dead, Outwindows, outLife, upPosition, decreaseLife, decreaseOpacity, increaseOpacity
+
 var spawnrate float64 = config.General.SpawnRate //On peut tester avec 0.017 pour avoir environ 1 particule par seconde
 var col float64
 var buttonPressed bool
@@ -53,7 +56,8 @@ func (s *System) Update() {
 		if x >= 0 && x <= 110 && y >= 120 && y <= 150 {
 			if !buttonPressed {
 				buttonPressed = true
-				RVBchange = !RVBchange
+				RGBchange = !RGBchange
+
 			}
 		}
 		if x >= 0 && x <= 110 && y >= 160 && y <= 190 {
@@ -196,8 +200,8 @@ func GetGravityState() bool {
 func GetColorBounceState() bool {
 	return ColorBounce
 }
-func GetRVBChangeState() bool {
-	return RVBchange
+func GetRGBChangeState() bool {
+	return RGBchange
 }
 func rotateParticle(particle *Particle, centerX, centerY, angle float64) {
 	// Calcule la distance entre le centre de rotation et la particule
@@ -244,27 +248,27 @@ func bounce(p *Particle) {
 	}
 }
 
-//Le compteur de durée du click pour le fade
+// Le compteur de durée du click pour le fade
 func count() {
 	col += 0.01
 }
 
-//Pour le debug, on affiche le nombre de particules
+// Pour le debug, on affiche le nombre de particules
 func GetLen() int {
 	return X
 }
 
-//Pour la mise en mémoire du reste du spawnrate
+// Pour la mise en mémoire du reste du spawnrate
 func spawnrateadd() {
 	spawnrate += config.General.SpawnRate
 }
 
-//Check si la particule est morte
+// Check si la particule est morte
 func dead(p *Particle) bool {
 	return (Outwindows(p) || outLife(p))
 }
 
-//Renvoie true si la particule sort complétement de l'écran
+// Renvoie true si la particule sort complétement de l'écran
 func Outwindows(p *Particle) bool {
 	if p.PositionX > float64(config.General.WindowSizeX) || p.PositionX < 0-10*config.General.ScaleX || p.PositionY > float64(config.General.WindowSizeY) || p.PositionY < 0-10*config.General.ScaleY {
 		return true
@@ -272,12 +276,12 @@ func Outwindows(p *Particle) bool {
 	return false
 }
 
-//Renvoie true si la particule n'a plus de LifeSpan
+// Renvoie true si la particule n'a plus de LifeSpan
 func outLife(p *Particle) bool {
 	return p.Lifespan == 0
 }
 
-//Augmente la position de la particule
+// Augmente la position de la particule
 func upPosition(p *Particle) {
 	if !SpeedFix {
 		p.PositionX += p.SpeedX
@@ -293,7 +297,7 @@ func upPosition(p *Particle) {
 	}
 }
 
-//Réduit le lifespan de la particule
+// Réduit le lifespan de la particule
 func decreaseLife(p *Particle) {
 	p.Lifespan -= 1
 	//Si l'opacity de base est à 1, on la réduit en fonction de la durée de vie restante
@@ -305,12 +309,12 @@ func decreaseLife(p *Particle) {
 	}
 }
 
-//Enlève l'opacity en fonction de la durée de vie restante
+// Enlève l'opacity en fonction de la durée de vie restante
 func decreaseOpacity(p *Particle) {
 	p.Opacity -= 1 / config.General.Lifespan
 }
 
-//Augmente l'opacity en fonction de la durée de vie restante
+// Augmente l'opacity en fonction de la durée de vie restante
 func increaseOpacity(p *Particle) {
 	p.Opacity += 1 / config.General.Lifespan
 	if p.Lifespan == 0 {

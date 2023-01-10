@@ -10,6 +10,7 @@ package config
 type Config struct {
 	WindowTitle                     string
 	WindowSizeX, WindowSizeY        int
+	Limite_affichage                []float64
 	ParticleImage                   string
 	Debug                           bool
 	InitNumParticles                int
@@ -22,6 +23,8 @@ type Config struct {
 	SpawnPerClick                   int
 	RandomSpeed                     bool
 	SpeedFix                        bool
+	Spawnimg                        bool
+	Pictures                        string
 	SpeedX, SpeedY                  float64
 	SpeedXmin                       float64
 	SpeedXmax                       float64
@@ -33,10 +36,10 @@ type Config struct {
 	Opacity                         float64
 	Optimisation                    bool
 	Fade                            bool
-	RVBchange                       bool
 	Bounce                          bool
 	ColorBounce                     bool
 	Orbital                         bool
+	RGBchange                       bool
 }
 
 var General Config

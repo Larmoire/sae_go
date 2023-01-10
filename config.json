@@ -30,7 +30,7 @@
 	"Fade" : false,
     "SpawnAtMouse": true,
     "SpawnPerClick": 1,
-    "RVBchange" : false,
+    "RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
 	"Orbital" : false

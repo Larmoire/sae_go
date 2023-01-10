@@ -22,4 +22,5 @@ type Particle struct {
 	SpeedX, SpeedY                  float64
 	SpawnRate                       float64
 	Lifespan                        float64
+	CibleX, CibleY                  float64
 }
