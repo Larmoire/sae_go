@@ -13,6 +13,7 @@ type Config struct {
 	Limite_affichage                []float64
 	ParticleImage                   string
 	Debug                           bool
+	GUI                             bool
 	InitNumParticles                int
 	RandomSpawn                     bool
 	SpawnAtMouse                    bool
@@ -38,7 +39,7 @@ type Config struct {
 	Fade                            bool
 	Bounce                          bool
 	ColorBounce                     bool
-	Orbital                         bool
+	Rotate                          bool
 	RGBchange                       bool
 }
 

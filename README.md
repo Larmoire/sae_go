@@ -94,8 +94,6 @@ Et entre **"SpeedYmin": float64** et **"SpeedYmax": float64** pour **Y**.
 
 **"Optimisation" : bool** est le mode d'optimisation proposé par l'énoncé, il récupère les particules mortes pour faire de nouvelles particules plutôt que d'en générer de nouvelles.  
 
-**"Fade" : bool** ????
-
 **"SpawnAtMouse": bool** est une manière de générer des particules, à l'endroit de la souris par un clic gauche. Le nombre de particules générées est géré par l'option **"SpawnPerClick": int**. En complément, on peut activer ou non l'option **"Fade" : bool** qui diminue l'opacité des particules générées à mesure que le clic gauche reste enfoncé. Une fois relaché, l'opacité reviens à sa valeur de base.  
 
 **"RGBchange" : bool** est une option pour faire varier les couleurs rouge, vert et bleu avec les touches 'R','G','B' (couleurs disponibles : Rouge, Vert, Bleu, Cyan, Jaune, Violet).
@@ -103,11 +101,9 @@ Et entre **"SpeedYmin": float64** et **"SpeedYmax": float64** pour **Y**.
 **"Bounce" : bool** est une option, si activée, qui permet aux particules de rebondir contre les bords de la fenêtre.  
 À cette option se couple la suivante; **"ColorBounce" : bool** qui une fois active définit une couleur aléatoire pour la particule quand elle touche un bord de la fenêtre.
 
-**"ColorBounce" : bool** est une option uniquement disponible lorsque Bounce est true, qui change la couleur des particules une fois que celles-ci touchent les bords de la fenêtre.
-
-**"Orbital" : bool** est une manière d'organiser la trajectoire des particules. Lorsqu'il est true, les particules entre en orbite autour du centre de la page.
+**"Rotate" : bool** est une manière d'organiser la trajectoire des particules. Lorsqu'il est true, les particules générées sont au nombre de 3 pour 1 et entrent en rotation avec pour centre le milieu de l'ecran.
 
 
 # Pratique
 Un commentaire en début de page mentionne les fonctions présente dans celle-ci.
-Un interface sur la fenêtre des particules permet de modifier directement les paramètres de **"Gravity" : bool**, de **"Bounce" : bool** (et **"ColorBounce" : bool**), **"RandomSpeed": bool**, **"RGBchange" : bool**, **"SpawnAtMouse": bool**, **"SpeedFix" : bool**
+Un interface sur la fenêtre des particules permet de modifier directement les paramètres de **"Gravity" : bool**, de **"Bounce" : bool** (et **"ColorBounce" : bool**), **"RandomSpeed": bool**, **"RGBchange" : bool**, **"SpawnAtMouse": bool**, **"SpeedFix" : bool**.

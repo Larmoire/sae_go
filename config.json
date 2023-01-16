@@ -4,6 +4,7 @@
 	"WindowSizeY": 600,
 	"ParticleImage": "assets/particle.png",
 	"Debug": true,
+	"GUI": true,
 	"InitNumParticles": 1,
 	"RandomSpawn": false,
 	"ScaleX": 1,
@@ -26,12 +27,12 @@
 	"Opacity" : 1,
     "Gravity": false,
     "GravityVal" : 0.5,
-	"Optimisation" : false,
+	"Optimisation" : true,
 	"Fade" : false,
     "SpawnAtMouse": true,
     "SpawnPerClick": 1,
     "RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
-	"Orbital" : false
+	"Rotate" : true
 }
