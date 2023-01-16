@@ -65,7 +65,7 @@ func (s *System) Update() {
 		if !Extensions.Bounce {
 			p.DeathOfParticle(s, e)
 		} else {
-			bounce(p)
+			p.Bounce()
 		}
 
 		//On passe à la particule suivante
@@ -109,22 +109,6 @@ func (s *System) Update() {
 }
 func UpdateLenList(i int) {
 	X += i
-}
-
-func bounce(p *Particle) {
-	//la faire rebondir sur les bords
-	if p.PositionX <= 0 || p.PositionX+p.SpeedX+10*config.General.ScaleX >= float64(config.General.WindowSizeX) {
-		p.SpeedX = -p.SpeedX
-		if Extensions.ColorBounce {
-			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
-		}
-	}
-	if p.PositionY <= 0 || p.PositionY+p.SpeedY+10*config.General.ScaleY >= float64(config.General.WindowSizeY) {
-		p.SpeedY = -p.SpeedY
-		if Extensions.ColorBounce {
-			p.ColorRed, p.ColorGreen, p.ColorBlue = rand.Float64(), rand.Float64(), rand.Float64()
-		}
-	}
 }
 
 // Le compteur de durée du click pour le fade
