@@ -141,8 +141,3 @@ func GetLen() int {
 func spawnrateadd() {
 	spawnrate += config.General.SpawnRate
 }
-
-// Renvoie true si la particule n'a plus de LifeSpan
-func outLife(p *Particle) bool {
-	return p.Lifespan == 0
-}
