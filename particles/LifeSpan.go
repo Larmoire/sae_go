@@ -1,19 +1,10 @@
 package particles
 
-import "project-particles/config"
-
 func (p *Particle) DecreaseLife() {
-	p.Lifespan -= 1
-	//On adapte l'Opacité à la durée de vie
-	p.ChangeOpacity()
-	if p.Lifespan == 0 {
-		p.Opacity = 0
+	//Si le Lifespan est actif, on retire 1 à la durée de vie de la particule
+	if p.Lifespan > 0 {
+		p.Lifespan -= 1
+		p.ChangeOpacity()
 	}
-}
-func (p *Particle) ChangeOpacity() {
-	if config.General.Opacity == 1 {
-		p.Opacity -= 1 / config.General.Lifespan
-	} else {
-		p.Opacity += 1 / config.General.Lifespan
-	}
+
 }

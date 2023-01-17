@@ -21,6 +21,7 @@ var (
 )
 
 func GUI() {
+	//On regarde si la souris est cliquée et si l'extension GUI est activée
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && config.General.GUI {
 		GravityState()
 		BounceState()
@@ -33,9 +34,12 @@ func GUI() {
 		FadeState()
 		RandomSpawnState()
 	} else {
+		//On reset le clic de la souris
 		buttonPressed = false
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func RandomSpeedState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 0 && y <= 30 {
@@ -45,11 +49,14 @@ func RandomSpeedState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func RandomSpawnState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 40 && y <= 70 {
 		if !buttonPressed {
 			buttonPressed = true
+			//Si SpawnAtMouse est activé, on le désactive
 			if SpawnAtMouse {
 				SpawnAtMouse = !SpawnAtMouse
 			}
@@ -58,12 +65,15 @@ func RandomSpawnState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func SpawnAtMouseState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 80 && y <= 110 {
 		if !buttonPressed {
 			buttonPressed = true
 			SpawnAtMouse = !SpawnAtMouse
+			//Si SpawnAtMouse est désactivé, on désactive Fade, sinon on désactive RandomSpawn
 			if !SpawnAtMouse {
 				Fade = false
 			} else {
@@ -72,6 +82,8 @@ func SpawnAtMouseState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func FadeState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 135 && x <= 245 && y >= 80 && y <= 110 && SpawnAtMouse {
@@ -81,6 +93,8 @@ func FadeState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func RGBChangeState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 120 && y <= 150 {
@@ -91,6 +105,8 @@ func RGBChangeState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func GravityState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 160 && y <= 190 {
@@ -100,18 +116,23 @@ func GravityState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func BounceState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 200 && y <= 230 {
 		if !buttonPressed {
 			buttonPressed = true
 			Bounce = !Bounce
+			//Si Bounce est désactivé, on désactive ColorBounce
 			if !Bounce {
 				ColorBounce = false
 			}
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func ColorBounceState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 135 && x <= 245 && y >= 200 && y <= 230 && Bounce {
@@ -122,6 +143,7 @@ func ColorBounceState() {
 	}
 }
 
+//Si la souris est sur le bouton, on change l'état de l'extension
 func RotateChangeState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 240 && y <= 270 {
@@ -132,6 +154,8 @@ func RotateChangeState() {
 		}
 	}
 }
+
+//Si la souris est sur le bouton, on change l'état de l'extension
 func SpeedFixState() {
 	x, y := ebiten.CursorPosition()
 	if x >= 0 && x <= 110 && y >= 280 && y <= 310 {

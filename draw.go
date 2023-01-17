@@ -22,6 +22,7 @@ import (
 func (g *game) Draw(screen *ebiten.Image) {
 	for e := g.system.Content.Front(); e != nil; e = e.Next() {
 		p, ok := e.Value.(*particles.Particle)
+		//Si la particule est toujours en vie, ou que le Lifespan est désactivé, on l'affiche
 		if p.Lifespan > 0 || p.Lifespan == -1 {
 			if ok {
 				options := ebiten.DrawImageOptions{}
@@ -31,14 +32,15 @@ func (g *game) Draw(screen *ebiten.Image) {
 				options.ColorM.Scale(p.ColorRed, p.ColorGreen, p.ColorBlue, p.Opacity)
 				screen.DrawImage(assets.ParticleImage, &options)
 			}
-			if particles.Outwindows(p) {
-				if config.General.Optimisation {
-					go g.system.Content.Remove(e)
-					particles.UpdateLenList(-1)
-				}
+			//Si la particule est en dehors de l'écran et que l'optimisation est active, on la supprime du système
+			if particles.Outwindows(p) && config.General.Optimisation {
+				go g.system.Content.Remove(e)
+				//On enlève 1 à la longeur de la liste de particules
+				particles.UpdateLenList(-1)
 			}
 		}
 	}
+	//Si le GUI est actif, on affiche les boutons
 	if config.General.GUI {
 		DrawRandomSpeed(screen)
 		DrawnRandomSpawn(screen)
@@ -49,20 +51,26 @@ func (g *game) Draw(screen *ebiten.Image) {
 		DrawRotate(screen)
 		DrawSpeedFix(screen)
 	}
+	//Si le debug est actif, on affiche les fps et la longeur de la liste de particules
 	if config.General.Debug {
-		//Si le debug est actif, on affiche les fps et la longeur de la liste de particules
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(ebiten.ActualTPS()), 5, config.General.WindowSizeY-40)
-		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(particles.GetLen()), 5, config.General.WindowSizeY-60)
+		ebitenutil.DebugPrintAt(screen, fmt.Sprint(particles.X), 5, config.General.WindowSizeY-60)
 	}
+	//On affiche le message de reset
 	ebitenutil.DebugPrintAt(screen, "Press TAB for a reset !", 5, config.General.WindowSizeY-20)
 }
+
+//Fonction qui affiche le bouton de RandomSpeed
 func DrawRandomSpeed(screen *ebiten.Image) {
-
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
+	//On dessine l'image sur l'écran
 	screen.DrawImage(button, op)
-
+	//Si l'extension est activée, on affiche "RandomSpeed: On" sinon "RandomSpeed: Off"
 	if Extensions.RandomSpeed {
 		ebitenutil.DebugPrintAt(screen, "RandomSpeed: On", 6, 5)
 	} else {
@@ -70,13 +78,19 @@ func DrawRandomSpeed(screen *ebiten.Image) {
 	}
 }
 
+//Fonction qui affiche le bouton de RandomSpawn
 func DrawnRandomSpawn(screen *ebiten.Image) {
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
+	//On décale l'image de 40 pixels en y
 	op.GeoM.Translate(0, 40)
+	//On dessine l'image sur l'écran
 	screen.DrawImage(button, op)
-
+	//Si l'extension est activée, on affiche "RandomSpawn: On" sinon "RandomSpawn: Off"
 	if Extensions.RandomSpawn {
 		ebitenutil.DebugPrintAt(screen, "RandomSpawn: On", 6, 45)
 	} else {
@@ -84,96 +98,121 @@ func DrawnRandomSpawn(screen *ebiten.Image) {
 	}
 }
 
+//Fonction qui affiche le bouton de SpawnAtMouse
 func DrawSpawnAtMouse(screen *ebiten.Image) {
-
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
+	//On décale l'image de 80 pixels en y
 	op.GeoM.Translate(0, 80)
+	//On dessine l'image sur l'écran
 	screen.DrawImage(button, op)
-
+	//Si l'extension est activée, on affiche "SpawnAtMouse: On"
 	if Extensions.SpawnAtMouse {
 		ebitenutil.DebugPrintAt(screen, "SpawnAtMouse: On", 6, 85)
+		//On décale l'image de 120 pixels en x
+		op.GeoM.Translate(120, 0)
+		//On dessine l'image sur l'écran
+		screen.DrawImage(button, op)
+		//Si l'extension Fade est activée, on affiche "Fade: On" sinon "Fade: Off"
 		if Extensions.Fade {
-			op.GeoM.Translate(120, 0)
-			screen.DrawImage(button, op)
 			ebitenutil.DebugPrintAt(screen, "Fade: On", 126, 85)
 		} else {
-			op.GeoM.Translate(120, 0)
-			screen.DrawImage(button, op)
 			ebitenutil.DebugPrintAt(screen, "Fade: Off", 126, 85)
 		}
+		//Si l'extension est désactivée, on affiche "SpawnAtMouse: Off"
 	} else {
-		op.GeoM.Translate(0, 80)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "SpawnAtMouse: Off", 6, 85)
 	}
 }
 
+//Fonction qui affiche le bouton de RGB
 func DrawRGB(screen *ebiten.Image) {
-
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
-
+	//On décale l'image de 120 pixels en y
+	op.GeoM.Translate(0, 120)
+	//On dessine l'image sur l'écran
+	screen.DrawImage(button, op)
+	//Si l'extension est activée, on affiche "RGB: On" sinon "RGB: Off"
 	if Extensions.RGBchange {
-		op.GeoM.Translate(0, 120)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "RGB: On", 6, 125)
 	} else {
-		op.GeoM.Translate(0, 120)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "RGB: Off", 6, 125)
 	}
 }
+
+//Fonction qui affiche le bouton de Gravity
 func DrawGravity(screen *ebiten.Image) {
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
-
+	//On décale l'image de 160 pixels en y
+	op.GeoM.Translate(0, 160)
+	//On dessine l'image sur l'écran
+	screen.DrawImage(button, op)
+	//Si l'extension est activée, on affiche "Gravity: On" sinon "Gravity: Off"
 	if Extensions.Gravity {
-		op.GeoM.Translate(0, 160)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "Gravity: On", 6, 165)
-
 	} else {
-		op.GeoM.Translate(0, 160)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "Gravity: Off", 6, 165)
 	}
 }
-func DrawBounce(screen *ebiten.Image) {
-	button := ebiten.NewImage(110, 30)
-	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
-	op := &ebiten.DrawImageOptions{}
 
+//Fonction qui affiche le bouton de Bounce
+func DrawBounce(screen *ebiten.Image) {
+	//On créee une image de 110x30 pixels
+	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
+	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
+	op := &ebiten.DrawImageOptions{}
+	//On décale l'image de 200 pixels en y
+	op.GeoM.Translate(0, 200)
+	//On dessine l'image sur l'écran
+	screen.DrawImage(button, op)
+	//Si l'extension est activée, on affiche "Bounce: On"
 	if Extensions.Bounce {
-		op.GeoM.Translate(0, 200)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "Bounce: On", 6, 205)
+		//On décale l'image de 120 pixels en x
+		op.GeoM.Translate(120, 0)
+		//On dessine l'image sur l'écran
+		screen.DrawImage(button, op)
+		//Si l'extension ColorBounce est activée, on affiche "Color: On" sinon "Color: Off"
 		if Extensions.ColorBounce {
-			op.GeoM.Translate(120, 0)
-			screen.DrawImage(button, op)
 			ebitenutil.DebugPrintAt(screen, "Color: On", 126, 205)
 		} else {
-			op.GeoM.Translate(120, 0)
-			screen.DrawImage(button, op)
 			ebitenutil.DebugPrintAt(screen, "Color: Off", 126, 205)
 		}
+		//Si l'extension est désactivée, on affiche "Bounce: Off"
 	} else {
-		op.GeoM.Translate(0, 200)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "Bounce: Off", 6, 205)
 	}
 }
 
+//Fonction qui affiche le bouton de Rotate
 func DrawRotate(screen *ebiten.Image) {
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
+	//On décale l'image de 240 pixels en y
 	op.GeoM.Translate(0, 240)
+	//On dessine l'image sur l'écran
 	screen.DrawImage(button, op)
-
+	//Si l'extension est activée, on affiche "Rotate: On" sinon "Rotate: Off"
 	if Extensions.Rotate {
 		ebitenutil.DebugPrintAt(screen, "Rotate: On", 6, 245)
 	} else {
@@ -181,19 +220,22 @@ func DrawRotate(screen *ebiten.Image) {
 	}
 }
 
+//Fonction qui affiche le bouton de SpeedFix
 func DrawSpeedFix(screen *ebiten.Image) {
-
+	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
+	//On la remplie de rouge
 	button.Fill(color.RGBA{0xff, 0x00, 0x00, 0xff})
+	//On créee un pointeur vers DrawImageOptions
 	op := &ebiten.DrawImageOptions{}
-
+	//On décale l'image de 280 pixels en y
+	op.GeoM.Translate(0, 280)
+	//On dessine l'image sur l'écran
+	screen.DrawImage(button, op)
+	//Si l'extension est activée, on affiche "SpeedFix: On" sinon "SpeedFix: Off"
 	if Extensions.SpeedFix {
-		op.GeoM.Translate(0, 280)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "SpeedFix: On", 6, 285)
 	} else {
-		op.GeoM.Translate(0, 280)
-		screen.DrawImage(button, op)
 		ebitenutil.DebugPrintAt(screen, "SpeedFix: Off", 6, 285)
 	}
 }

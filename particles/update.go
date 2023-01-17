@@ -15,18 +15,18 @@ import (
 // projet.
 // C'est à vous de développer cette fonction.
 
-//fonction présente : Update,UpdateLenList, GetSpeedFixState, GetSpawnAtMouseState, GetRandomSpeedState, GetBounceState, GetGravityState, GetColorBounceState,
-//GetRGBChangeState, rotateParticle, updateOrbit,bounce, count, GetLen, spawnrateadd, dead, Outwindows, outLife, upPosition, decreaseLife, decreaseOpacity, increaseOpacity
+//fonction présente : Update, UpdateLenList, GUI, UpdateOrbit, Bounce, count, spawnrateadd, UpdatePos, DecreaseLife
 
 var spawnrate float64 = config.General.SpawnRate //On peut tester avec 0.017 pour avoir environ 1 particule par seconde
 var col float64
 var Countdead int
 
 func (s *System) Update() {
-
+	//On affiche la GUI (interface graphique)
 	Extensions.GUI()
-
+	//On met à jour la longueur de la liste
 	X = s.Content.Len()
+	//On reset le compte des particules mortes
 	Countdead = 0
 	//On compte le nombre de particules mortes de la liste
 	for e := s.Content.Front(); e != nil; e = e.Next() {
@@ -49,11 +49,10 @@ func (s *System) Update() {
 	//Tant que e n'est pas nul, on fait les actions suivantes
 	for e != nil {
 		p := (e.Value.(*Particle))
-		//On fait avancer la particule
+		//Si la rotation est activée, on fait avancer la particule en mode rotation
 		if Extensions.Rotate {
-			//On fait avancer la particule en mode rotation
 			p.UpdateOrbit()
-
+			//Sinon, on fait avancer la particule en mode classique
 		} else {
 			p.UpdatePos()
 		}
@@ -61,10 +60,13 @@ func (s *System) Update() {
 		//Si le lifespan est activé, on enlève 1 à la durée de vie de la particule
 		if p.Lifespan != -1 {
 			p.DecreaseLife()
+			p.ChangeOpacity()
 		}
+		//Si l'extension Bounce n'est pas activée, on regarde si la particule est morte
 		if !Extensions.Bounce {
 			p.DeathOfParticle(s, e)
 		} else {
+			//Sinon, on fait rebondir la particule sur les rebords sans prendre en compte sa mort
 			p.Bounce()
 		}
 
@@ -74,6 +76,7 @@ func (s *System) Update() {
 
 	//On regarde si l'option SpawnAtMouse est activée
 	if Extensions.SpawnAtMouse {
+		//On génère la couleur de la particule
 		setColor()
 		//On génère une particule à la position de la souris si le click gauche est enfoncé
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
@@ -83,6 +86,7 @@ func (s *System) Update() {
 
 			//On génère SpawnPerClick particules à la position de la souris
 			for i := 0; i < config.General.SpawnPerClick; i++ {
+				//Si le fade est en dessous de 1 ou que le fade n'est pas activé, on génère la particule
 				if col < 1 || !Extensions.Fade {
 					s.Content.PushFront(CreateParticule())
 				}
@@ -107,6 +111,8 @@ func (s *System) Update() {
 		}
 	}
 }
+
+// Augmente la taille de la liste de particules de i
 func UpdateLenList(i int) {
 	X += i
 }
@@ -114,11 +120,6 @@ func UpdateLenList(i int) {
 // Le compteur de durée du click pour le fade
 func count() {
 	col += 0.01
-}
-
-// Pour le debug, on affiche le nombre de particules
-func GetLen() int {
-	return X
 }
 
 // Pour la mise en mémoire du reste du spawnrate

@@ -4,7 +4,6 @@ import (
 	"container/list"
 	"math/rand"
 	Extensions "project-particles/Extension"
-	pictures "project-particles/Extension/Pictures"
 	"project-particles/config"
 	"time"
 
@@ -36,15 +35,29 @@ var Red, Green, Blue float64
 var NombreDeParticules int = config.General.InitNumParticles
 
 func NewSystem() System {
-
+	//On définit les variables de base des extensions
+	Extensions.Gravity = config.General.Gravity
+	Extensions.Bounce = config.General.Bounce
+	Extensions.ColorBounce = config.General.ColorBounce
+	Extensions.RandomSpeed = config.General.RandomSpeed
+	Extensions.RGBchange = config.General.RGBchange
+	Extensions.SpeedFix = config.General.SpeedFix
+	Extensions.SpawnAtMouse = config.General.SpawnAtMouse
+	Extensions.Rotate = config.General.Rotate
+	Extensions.Fade = config.General.Fade
+	Extensions.RandomSpawn = config.General.RandomSpawn
+	//On définit la liste de particules
 	l := list.New()
-	ImageIn(l)
+	//On génère la seed random à partir du temps pour qu'elle soit différente à chaque fois
 	rand.Seed(time.Now().UnixNano())
+	//On génère les particules en fonction du nombre de particules défini dans le fichier config
 	for i := 0; i < (config.General.InitNumParticles); i++ {
+		//On ajoute la particule à la liste si l'extension SpawnAtMouse n'est pas activée
 		if !Extensions.SpawnAtMouse {
 			l.PushFront(CreateParticule())
 		}
 	}
+	//On renvoie le systeme de particules
 	return System{Content: l}
 }
 
@@ -61,6 +74,7 @@ func CreateParticule() *Particle {
 	ParticuleAMettre = (&Particle{
 		PositionX: PosX,
 		PositionY: PosY,
+		Rotation:  0,
 		ScaleX:    config.General.ScaleX, ScaleY: config.General.ScaleY,
 		ColorRed: Red, ColorGreen: Green, ColorBlue: Blue,
 		Opacity:  config.General.Opacity,
@@ -73,12 +87,13 @@ func CreateParticule() *Particle {
 	return ParticuleAMettre
 }
 
-// La vitesse est aléatoire entre les valeurs min et max
 func setSpeed() {
+	//La vitesse est aléatoire entre les valeurs min et max si l'extension RandomSpeed est activée
 	if Extensions.RandomSpeed {
 		Speedx = rand.Float64()*(config.General.SpeedXmax-config.General.SpeedXmin) + config.General.SpeedXmin
 		Speedy = rand.Float64()*(config.General.SpeedYmax-config.General.SpeedYmin) + config.General.SpeedYmin
 	} else {
+		//Sinon la vitesse est fixe
 		Speedx = config.General.SpeedX
 		Speedy = config.General.SpeedY
 	}
@@ -119,7 +134,7 @@ func setColor() {
 }
 func setSpawn() {
 	if Extensions.RandomSpawn {
-		//Si randomspawn est true, on définit la position de la particule aléatoirement
+		//Si randomspawn est true, on définit la position de la particule aléatoirement dans la fenêtre
 		PosX = rand.Float64() * ((float64(config.General.WindowSizeX)) - 10*config.General.ScaleX)
 		PosY = rand.Float64() * ((float64(config.General.WindowSizeY)) - 10*config.General.ScaleY)
 	} else {
@@ -132,35 +147,5 @@ func setSpawn() {
 		acX, acY = ebiten.CursorPosition()
 		PosX = float64(acX)
 		PosY = float64(acY)
-	}
-}
-func ImageIn(l *list.List) {
-	if config.General.Pictures != "" {
-
-		h, w, image := pictures.Gettabpixels()
-		rand.Seed(time.Now().UnixNano())
-		for k := 0; k < len(image); k++ {
-			l := rand.Intn(len(image))
-			image[k], image[l] = image[l], image[k]
-		}
-
-		precision := 10.0
-		NombreDeParticules = h * w
-
-		config.General.ScaleX = config.General.ScaleX / precision
-		config.General.ScaleY = config.General.ScaleY / precision
-
-		for i := 0; i < NombreDeParticules; i++ {
-			NbPart += 1
-			l.PushFront(CreateParticule())
-			l.Front().Value.(*Particle).CibleX, l.Front().Value.(*Particle).CibleY = float64(image[i][0])*config.General.ScaleX*precision, float64(image[i][1])*config.General.ScaleY*precision
-			l.Front().Value.(*Particle).ColorRed, l.Front().Value.(*Particle).ColorGreen, l.Front().Value.(*Particle).ColorBlue = float64(image[i][2])/255, float64(image[i][3])/255, float64(image[i][4])/255
-			l.Front().Value.(*Particle).Opacity = float64(image[i][5]) / 255
-			if config.General.Spawnimg {
-				l.Front().Value.(*Particle).PositionX, l.Front().Value.(*Particle).PositionY = l.Front().Value.(*Particle).CibleX, l.Front().Value.(*Particle).CibleY
-
-			}
-		}
-
 	}
 }

@@ -19,5 +19,6 @@ func (p *Particle) UpdateOrbit() {
 	if !Extensions.SpeedFix {
 		p.PositionX = float64(config.General.WindowSizeX)/2 + distance*math.Cos(newAngle)
 		p.PositionY = float64(config.General.WindowSizeY)/2 + distance*math.Sin(newAngle)
+		p.Rotation -= 0.05
 	}
 }
