@@ -17,6 +17,7 @@ var (
 	Rotate        bool = config.General.Rotate
 	Fade          bool = config.General.Fade
 	RandomSpawn   bool = config.General.RandomSpawn
+	Arrows        bool = config.General.Arrows
 	buttonPressed bool
 )
 
@@ -33,10 +34,14 @@ func GUI() {
 		RotateChangeState()
 		FadeState()
 		RandomSpawnState()
+	} else if ebiten.IsKeyPressed(ebiten.KeyControl) && !buttonPressed {
+		buttonPressed = true
+		Arrows = !Arrows
 	} else {
 		//On reset le clic de la souris
 		buttonPressed = false
 	}
+
 }
 
 //Si la souris est sur le bouton, on change l'état de l'extension

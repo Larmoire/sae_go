@@ -24,8 +24,6 @@ type Config struct {
 	SpawnPerClick                   int
 	RandomSpeed                     bool
 	SpeedFix                        bool
-	Spawnimg                        bool
-	Pictures                        string
 	SpeedX, SpeedY                  float64
 	SpeedXmin                       float64
 	SpeedXmax                       float64
@@ -41,6 +39,7 @@ type Config struct {
 	ColorBounce                     bool
 	Rotate                          bool
 	RGBchange                       bool
+	Arrows                          bool
 }
 
 var General Config

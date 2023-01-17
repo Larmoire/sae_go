@@ -46,7 +46,7 @@ config.json
     "RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
-	"Orbital" : false
+	"Rotate" : false
 }
 ```
 # Vue détaillée

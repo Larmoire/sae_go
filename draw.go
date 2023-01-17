@@ -144,6 +144,12 @@ func DrawRGB(screen *ebiten.Image) {
 	//Si l'extension est activée, on affiche "RGB: On" sinon "RGB: Off"
 	if Extensions.RGBchange {
 		ebitenutil.DebugPrintAt(screen, "RGB: On", 6, 125)
+		ebitenutil.DebugPrintAt(screen, "R for Red", config.General.WindowSizeX-59, 0)
+		ebitenutil.DebugPrintAt(screen, "G for Green", config.General.WindowSizeX-70, 15)
+		ebitenutil.DebugPrintAt(screen, "B for Blue", config.General.WindowSizeX-64, 30)
+		ebitenutil.DebugPrintAt(screen, "C for Cyan", config.General.WindowSizeX-64, 45)
+		ebitenutil.DebugPrintAt(screen, "Y for Yellow", config.General.WindowSizeX-75, 60)
+		ebitenutil.DebugPrintAt(screen, "P for Purple", config.General.WindowSizeX-75, 75)
 	} else {
 		ebitenutil.DebugPrintAt(screen, "RGB: Off", 6, 125)
 	}

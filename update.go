@@ -5,7 +5,6 @@ package main
 // la bibliothèque Ebiten. Cette fonction ne devrait pas être modifiée sauf
 // pour les deux dernières extensions.
 func (g *game) Update() error {
-
 	g.system.Update()
 
 	return nil

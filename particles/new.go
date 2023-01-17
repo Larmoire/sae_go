@@ -29,6 +29,7 @@ var Speedy float64
 
 var NbPart int
 var X int
+var x bool = true
 
 var Red, Green, Blue float64
 
@@ -101,7 +102,9 @@ func setSpeed() {
 }
 func setColor() {
 	//Si le fade est activé, on définit la couleur en fonction de col, la durée du click
-	if Extensions.Fade {
+	if Extensions.Arrows {
+		Red, Green, Blue = 1, 0, 0
+	} else if Extensions.Fade {
 		Red = config.General.ColorRed - col
 		Green = config.General.ColorGreen - col
 		Blue = config.General.ColorBlue - col
@@ -133,19 +136,42 @@ func setColor() {
 	}
 }
 func setSpawn() {
+	initvar()
 	if Extensions.RandomSpawn {
 		//Si randomspawn est true, on définit la position de la particule aléatoirement dans la fenêtre
 		PosX = rand.Float64() * ((float64(config.General.WindowSizeX)) - 10*config.General.ScaleX)
 		PosY = rand.Float64() * ((float64(config.General.WindowSizeY)) - 10*config.General.ScaleY)
-	} else {
-		//Sinon, on la met à une valeur fixe du config
-		PosX = float64(config.General.SpawnX)
-		PosY = float64(config.General.SpawnY)
 	}
 	if Extensions.SpawnAtMouse && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 		//Sinon, on regarde si SpawnAtMouse est activé pour mettre la position à celle de la souris
 		acX, acY = ebiten.CursorPosition()
 		PosX = float64(acX)
 		PosY = float64(acY)
+	}
+	if Extensions.Arrows {
+
+		//PosX += 1 Si la touche droite est pressée
+		if ebiten.IsKeyPressed(ebiten.KeyRight) && PosX < float64(config.General.WindowSizeX)-10*config.General.ScaleX-10 {
+			PosX += 10
+		}
+		//PosX -= 1 Si la touche gauche est pressée
+		if ebiten.IsKeyPressed(ebiten.KeyLeft) && PosX > 0+10*config.General.ScaleX {
+			PosX -= 10
+		}
+		//PosY += 1 Si la touche bas est pressée
+		if ebiten.IsKeyPressed(ebiten.KeyDown) && PosY < float64(config.General.WindowSizeY)-10*config.General.ScaleY-10 {
+			PosY += 10
+		}
+		//PosX -= 1 Si la touche haute est pressée
+		if ebiten.IsKeyPressed(ebiten.KeyUp) && PosY > 0+10*config.General.ScaleY {
+			PosY -= 10
+		}
+	}
+}
+func initvar() {
+	if x {
+		PosX = float64(config.General.SpawnX)
+		PosY = float64(config.General.SpawnY)
+		x = !x
 	}
 }

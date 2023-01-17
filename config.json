@@ -34,5 +34,6 @@
     "RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
-	"Rotate" : true
+	"Rotate" : true,
+	"Arrows" : true
 }

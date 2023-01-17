@@ -50,6 +50,7 @@ func (s *System) Update() {
 	for e != nil {
 		p := (e.Value.(*Particle))
 		//Si la rotation est activée, on fait avancer la particule en mode rotation
+
 		if Extensions.Rotate {
 			p.UpdateOrbit()
 			//Sinon, on fait avancer la particule en mode classique
@@ -57,7 +58,6 @@ func (s *System) Update() {
 			p.Rotation = 0
 			p.UpdatePos()
 		}
-
 		//Si le lifespan est activé, on enlève 1 à la durée de vie de la particule
 		if p.Lifespan != -1 {
 			p.DecreaseLife()
@@ -70,7 +70,9 @@ func (s *System) Update() {
 			//Sinon, on fait rebondir la particule sur les rebords sans prendre en compte sa mort
 			p.Bounce()
 		}
-
+		if Extensions.Arrows {
+			p.ColorRed, p.ColorGreen, p.ColorBlue = 1, 1, 1
+		}
 		//On passe à la particule suivante
 		e = e.Next()
 	}
@@ -81,10 +83,8 @@ func (s *System) Update() {
 		setColor()
 		//On génère une particule à la position de la souris si le click gauche est enfoncé
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-
 			//On compte la durée du click pour gérer le fade
 			count()
-
 			//On génère SpawnPerClick particules à la position de la souris
 			for i := 0; i < config.General.SpawnPerClick; i++ {
 				//Si le fade est en dessous de 1 ou que le fade n'est pas activé, on génère la particule
@@ -92,7 +92,6 @@ func (s *System) Update() {
 					s.Content.PushFront(CreateParticule())
 				}
 			}
-
 			//Si le click gauche n'est pas enfoncé, on remet la durée du click à 0
 		} else {
 			col = 0
@@ -102,7 +101,6 @@ func (s *System) Update() {
 		if spawnrate < 1 {
 			spawnrateadd()
 		} else {
-
 			//Sinon, on génère SpawnRate particules
 			for spawnrate >= 1 {
 
