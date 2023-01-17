@@ -54,6 +54,7 @@ func (s *System) Update() {
 			p.UpdateOrbit()
 			//Sinon, on fait avancer la particule en mode classique
 		} else {
+			p.Rotation = 0
 			p.UpdatePos()
 		}
 

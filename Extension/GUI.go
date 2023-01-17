@@ -56,13 +56,12 @@ func RandomSpawnState() {
 	if x >= 0 && x <= 110 && y >= 40 && y <= 70 {
 		if !buttonPressed {
 			buttonPressed = true
-			//Si SpawnAtMouse est activé, on le désactive
-			if SpawnAtMouse {
-				SpawnAtMouse = !SpawnAtMouse
-			}
 			RandomSpawn = !RandomSpawn
-
 		}
+	}
+	//Si SpawnAtMouse est activé et le RandomSpawn aussi, on le désactive
+	if SpawnAtMouse && RandomSpawn {
+		SpawnAtMouse = !SpawnAtMouse
 	}
 }
 
@@ -73,13 +72,14 @@ func SpawnAtMouseState() {
 		if !buttonPressed {
 			buttonPressed = true
 			SpawnAtMouse = !SpawnAtMouse
-			//Si SpawnAtMouse est désactivé, on désactive Fade, sinon on désactive RandomSpawn
-			if !SpawnAtMouse {
-				Fade = false
-			} else {
-				RandomSpawn = false
-			}
 		}
+	}
+	if !SpawnAtMouse {
+		Fade = false
+	}
+	//Si SpawnAtMouse est activé et le RandomSpawn aussi, on désactive RandomSpawn
+	if SpawnAtMouse && RandomSpawn {
+		RandomSpawn = false
 	}
 }
 
@@ -124,11 +124,11 @@ func BounceState() {
 		if !buttonPressed {
 			buttonPressed = true
 			Bounce = !Bounce
-			//Si Bounce est désactivé, on désactive ColorBounce
-			if !Bounce {
-				ColorBounce = false
-			}
 		}
+	}
+	//Si Bounce est désactivé, on désactive ColorBounce
+	if !Bounce {
+		ColorBounce = false
 	}
 }
 
