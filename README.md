@@ -20,23 +20,22 @@ Ou, pour Linux
 Ainsi, se présenteront sur le terminal tous les paramètres disponibles.
 Il suffit ensuite d'effectuer la commande précedente, avec l'argument correspondant à la configuration que vous souhaitez:
 
-	*Custom*, **c**  Qui affiche un interface graphique pour custom en temps réel la génération de particule
+	Custom, c  Qui affiche un interface graphique pour custom en temps réel la génération de particule
 
-  	*Draw*, **d**  Qui permet de faire des dessins
+  	Draw, d  Qui permet de faire des dessins
 
-	*Rotate*, **r**  Qui permet de générer des particules avec un clic souris, entrant en rotation avec le centre de l'écran
+	Rotate, r  Qui permet de générer des particules avec un clic souris, entrant en rotation avec le centre de l'écran
 
-	*Arrows*,* **a**  Qui permet de faire bouger le point de spawn avec les flèches directionnelles du clavier
+	Arrows, a  Qui permet de faire bouger le point de spawn avec les flèches directionnelles du clavier
 
-	*Bounce*, **b**  Qui créer des particules à chaque clic, rebondissant sur les bords de la fenêtre en changeant de couleur
+	Bounce, b  Qui créer des particules à chaque clic, rebondissant sur les bords de la fenêtre en changeant de couleur
 
-	*Gravity*, **g**  Qui permet de créer des particules affectées par la gravité
+	Gravity, g  Qui permet de créer des particules affectées par la gravité
 ## Exemple : 
 
 ```bash 
 ./project-particles c
 ```
-
 ```json
 {
 	"WindowTitle": "Particles",
