@@ -49,25 +49,26 @@ config.json
 
 ## Paramètrage de la fenêtre et setup
 
+Cela donne le nom de la fenêtre.  
 ```json
 "WindowTitle": "Project particles"
 ``` 
-Cela donne le nom de la fenêtre.  
-
+Cela sert à dimensionner la fenêtre de base (donc pour dimension 800x600).
 ```json
 "WindowSizeX": 800,
 "WindowSizeY": 600
 ``` 
-servent à dimensionner la fenêtre de base (donc pour dimension 800x600).
-
+Cela sert à définir l'image pour la particule.
 ```json
-**"ParticleImage": "assets/particle.png"** définit l'image pour la particule.  
+"ParticleImage": "assets/particle.png"
 ``` 
+Cela sert à afficher le debug sur la fenêtre, affichant les fps et le nombre de particules dans la liste.
 ```json
-**"Debug": bool** sert à afficher le debug sur la fenêtre, affichant les fps et le nombre de particules créées.
+"Debug": true
 ``` 
+Cela définit le nombre de particules au lancement du code.
 ```json   
-**"InitNumParticles": int** définit le nombre de particules au lancement du code.
+"InitNumParticles": 1
 ``` 
 
 
