@@ -5,14 +5,46 @@ Ebitengine (Eh-Bee-Ten-Gin) (anciennement connu sous le nom d'Ebiten) est un mot
 
 Dans notre projet, cette libraire Ebiten nous sert à gérer un système de particules, parametré par des fichier .json.
 
+Pour lancer le programme il suffit de faire les commandes suivantes : 
+```bash
+go build
+```
+Puis, pour Windows
+```bash
+.\project-particles 
+```
+Ou, pour Linux
+```bash
+./project-particles
+```
+Ainsi, se présenteront sur le terminal tous les paramètres disponibles.
+Il suffit ensuite d'effectuer la commande précedente, avec l'argument correspondant à la configuration que vous souhaitez:
+
+	*Custom*, **c**  Qui affiche un interface graphique pour custom en temps réel la génération de particule
+
+  	*Draw*, **d**  Qui permet de faire des dessins
+
+	*Rotate*, **r**  Qui permet de générer des particules avec un clic souris, entrant en rotation avec le centre de l'écran
+
+	*Arrows*,* **a**  Qui permet de faire bouger le point de spawn avec les flèches directionnelles du clavier
+
+	*Bounce*, **b**  Qui créer des particules à chaque clic, rebondissant sur les bords de la fenêtre en changeant de couleur
+
+	*Gravity*, **g**  Qui permet de créer des particules affectées par la gravité
+## Exemple : 
+
+```bash 
+./project-particles c
+```
+
 ```json
-config.json
 {
-	"WindowTitle": "Project particles",
+	"WindowTitle": "Particles",
 	"WindowSizeX": 800,
 	"WindowSizeY": 600,
 	"ParticleImage": "assets/particle.png",
-	"Debug": true,
+	"Debug": false,
+	"GUI": false,
 	"InitNumParticles": 1,
 	"RandomSpawn": false,
 	"ScaleX": 1,
@@ -22,27 +54,28 @@ config.json
 	"ColorBlue": 1,
 	"SpawnX": 400,
 	"SpawnY": 300,
-	"SpawnRate": 0.5,
+	"SpawnRate": 1,
 	"RandomSpeed": false,
 	"SpeedFix" : false,
 	"SpeedX": 5,
 	"SpeedY": 5,	
-	"SpeedXmin": -10,
-	"SpeedXmax": 10,
-	"SpeedYmin": -10,
-	"SpeedYmax": 10,
+	"SpeedXmin": -3,
+	"SpeedXmax": 3,
+	"SpeedYmin": -3,
+	"SpeedYmax": 3,
 	"Lifespan" : -1,
 	"Opacity" : 1,
     "Gravity": false,
     "GravityVal" : 0.5,
 	"Optimisation" : false,
 	"Fade" : false,
-    "SpawnAtMouse": true,
+    "SpawnAtMouse": false,
     "SpawnPerClick": 1,
     "RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
-	"Rotate" : false
+	"Rotate" : false,
+	"Arrows" : false
 }
 ```
 # Vue détaillée
@@ -173,7 +206,7 @@ C'est une manière d'organiser la trajectoire des particules. Lorsqu'il est true
 C'est un mode qui permet de déplacer le point de spawn si RandomSpawn est false avec les flèches directionnelles
 ```json
 "Arrows" : true
-
+```
 
 # Pratique
 Un commentaire en début de page mentionne les fonctions présente dans celle-ci.
