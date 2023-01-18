@@ -32,6 +32,9 @@ Il suffit ensuite d'effectuer la commande précedente, avec l'argument correspon
 ```bash 
 ./project-particles c
 ```
+
+# Vue détaillée
+
 ```json
 {
 	"WindowTitle": "Particles",
@@ -73,7 +76,6 @@ Il suffit ensuite d'effectuer la commande précedente, avec l'argument correspon
 	"Arrows" : false
 }
 ```
-# Vue détaillée
 
 ## Paramètrage de la fenêtre et setup
 
