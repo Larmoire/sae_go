@@ -9,11 +9,7 @@ Pour lancer le programme il suffit de faire les commandes suivantes :
 ```bash
 go build
 ```
-Puis, pour Windows
-```bash
-.\project-particles 
-```
-Ou, pour Linux
+Puis,
 ```bash
 ./project-particles
 ```
@@ -64,13 +60,13 @@ Il suffit ensuite d'effectuer la commande précedente, avec l'argument correspon
 	"SpeedYmax": 3,
 	"Lifespan" : -1,
 	"Opacity" : 1,
-    "Gravity": false,
-    "GravityVal" : 0.5,
+	"Gravity": false,
+	"GravityVal" : 0.5,
 	"Optimisation" : false,
 	"Fade" : false,
-    "SpawnAtMouse": false,
-    "SpawnPerClick": 1,
-    "RGBchange" : false,
+	"SpawnAtMouse": false,
+	"SpawnPerClick": 1,
+	"RGBchange" : false,
 	"Bounce" : false,
 	"ColorBounce" : false,
 	"Rotate" : false,
