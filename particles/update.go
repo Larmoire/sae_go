@@ -89,7 +89,10 @@ func (s *System) Update() {
 			for i := 0; i < config.General.SpawnPerClick; i++ {
 				//Si le fade est en dessous de 1 ou que le fade n'est pas activé, on génère la particule
 				if col < 1 || !Extensions.Fade {
-					s.Content.PushFront(CreateParticule())
+					if !(CreateParticule().PositionX == -100 || CreateParticule().PositionY == -100) {
+						s.Content.PushFront(CreateParticule())
+					}
+
 				}
 			}
 			//Si le click gauche n'est pas enfoncé, on remet la durée du click à 0

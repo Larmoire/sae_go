@@ -82,8 +82,6 @@ func CreateParticule() *Particle {
 		SpeedX:   Speedx,
 		SpeedY:   Speedy,
 		Lifespan: config.General.Lifespan,
-		CibleX:   float64(PosX),
-		CibleY:   float64(PosY),
 	})
 	return ParticuleAMettre
 }
@@ -101,32 +99,39 @@ func setSpeed() {
 
 }
 func setColor() {
-	//Si le fade est activé, on définit la couleur en fonction de col, la durée du click
+	//Si l'extention arrows est active, la couleur de base est rouge pour se reperer
 	if Extensions.Arrows {
 		Red, Green, Blue = 1, 0, 0
+		//Sinon, on regarde si le Fade est actif pour définir la couleur en fonction de col, la durée du click
 	} else if Extensions.Fade {
 		Red = config.General.ColorRed - col
 		Green = config.General.ColorGreen - col
 		Blue = config.General.ColorBlue - col
+		//Sinon on regarde si le RGB est actif
 	} else if Extensions.RGBchange {
-		//Changement de la couleur en fonction des touches du clavier
-		if ebiten.IsKeyPressed(ebiten.KeyR) { //Rouge en pressant R
+		//On récupère la touche appuyé au clavier et on la traite dans un switch
+		switch string(ebiten.AppendInputChars(nil)) {
+		//Si r, alors rouge, si b, alors bleu, etc
+		case "r": //red
 			Red, Green, Blue = 1, 0, 0
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyG) { //Vert en pressant G
-			Red, Green, Blue = 0, 1, 0
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyB) { //Bleu en pressant B
+		case "b": //blue
 			Red, Green, Blue = 0, 0, 1
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyY) { //Jaune en pressant Y
+		case "y": //yellow
 			Red, Green, Blue = 1, 1, 0
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyC) { //Cyan en pressant C
+		case "g": //green
+			Red, Green, Blue = 0.18, 0.54, 0.34
+		case "c": //cyan
 			Red, Green, Blue = 0, 1, 1
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyP) { //Violet en pressant P
+		case "m": //magenta
 			Red, Green, Blue = 1, 0, 1
+		case "w": //white
+			Red, Green, Blue = 1, 1, 1
+		case "o": //orange
+			Red, Green, Blue = 1, 0.5, 0
+		case "p": //purple
+			Red, Green, Blue = 0.54, 0.17, 0.89
+		case "l": //lime
+			Red, Green, Blue = 0.4, 0.80, 0.67
 		}
 	} else {
 		//Sinon, on définit la couleur en fonction du config
@@ -135,21 +140,28 @@ func setColor() {
 		Blue = config.General.ColorBlue
 	}
 }
+
 func setSpawn() {
+	//Fonction pour définir les variables de spawn une seule fois.
 	initvar()
+	//Si randomspawn est true, on définit la position de la particule aléatoirement dans la fenêtre
 	if Extensions.RandomSpawn {
-		//Si randomspawn est true, on définit la position de la particule aléatoirement dans la fenêtre
 		PosX = rand.Float64() * ((float64(config.General.WindowSizeX)) - 10*config.General.ScaleX)
 		PosY = rand.Float64() * ((float64(config.General.WindowSizeY)) - 10*config.General.ScaleY)
 	}
+	//Si SpawnAtMouse est activé et qu'un clic est fait, on met la position à celle de la souris
 	if Extensions.SpawnAtMouse && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		//Sinon, on regarde si SpawnAtMouse est activé pour mettre la position à celle de la souris
 		acX, acY = ebiten.CursorPosition()
-		PosX = float64(acX)
-		PosY = float64(acY)
+		if !(float64(acX) >= float64(config.General.WindowSizeX)-10*config.General.ScaleX || float64(acX) <= 10*config.General.ScaleX || float64(acY) >= float64(config.General.WindowSizeY)-10*config.General.ScaleY || float64(acY) <= 10*config.General.ScaleY) {
+			PosX = float64(acX)
+			PosY = float64(acY)
+		} else {
+			PosX = -100
+			PosY = -100
+		}
 	}
+	//Si l'extension Arrows est active, on change le point de spawn avec les flèches directionelles
 	if Extensions.Arrows {
-
 		//PosX += 1 Si la touche droite est pressée
 		if ebiten.IsKeyPressed(ebiten.KeyRight) && PosX < float64(config.General.WindowSizeX)-10*config.General.ScaleX-10 {
 			PosX += 10

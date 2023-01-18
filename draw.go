@@ -51,16 +51,18 @@ func (g *game) Draw(screen *ebiten.Image) {
 		DrawRotate(screen)
 		DrawSpeedFix(screen)
 	}
+	//On affiche l'aide des touches pour les couleurs si RGB est actif.
+	DrawRGBhelp(screen)
 	//Si le debug est actif, on affiche les fps et la longeur de la liste de particules
-	if config.General.Debug {
+	if Extensions.Debug {
 		ebitenutil.DebugPrintAt(screen, fmt.Sprintln(ebiten.ActualTPS()), 5, config.General.WindowSizeY-40)
 		ebitenutil.DebugPrintAt(screen, fmt.Sprint(particles.X), 5, config.General.WindowSizeY-60)
 	}
 	//On affiche le message de reset
-	ebitenutil.DebugPrintAt(screen, "Press TAB for a reset !", 5, config.General.WindowSizeY-20)
+	ebitenutil.DebugPrintAt(screen, "Press TAB or CTRL for either RESET or DEBUG MENU !", 5, config.General.WindowSizeY-20)
 }
 
-//Fonction qui affiche le bouton de RandomSpeed
+// Fonction qui affiche le bouton de RandomSpeed
 func DrawRandomSpeed(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -78,7 +80,7 @@ func DrawRandomSpeed(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de RandomSpawn
+// Fonction qui affiche le bouton de RandomSpawn
 func DrawnRandomSpawn(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -98,7 +100,7 @@ func DrawnRandomSpawn(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de SpawnAtMouse
+// Fonction qui affiche le bouton de SpawnAtMouse
 func DrawSpawnAtMouse(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -129,7 +131,7 @@ func DrawSpawnAtMouse(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de RGB
+// Fonction qui affiche le bouton de RGB
 func DrawRGB(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -144,18 +146,27 @@ func DrawRGB(screen *ebiten.Image) {
 	//Si l'extension est activée, on affiche "RGB: On" sinon "RGB: Off"
 	if Extensions.RGBchange {
 		ebitenutil.DebugPrintAt(screen, "RGB: On", 6, 125)
+	} else {
+		ebitenutil.DebugPrintAt(screen, "RGB: Off", 6, 125)
+	}
+}
+func DrawRGBhelp(screen *ebiten.Image) {
+	//On affiche les touches correspondant à chaque couleur disponible
+	if Extensions.RGBchange {
 		ebitenutil.DebugPrintAt(screen, "R for Red", config.General.WindowSizeX-59, 0)
 		ebitenutil.DebugPrintAt(screen, "G for Green", config.General.WindowSizeX-70, 15)
 		ebitenutil.DebugPrintAt(screen, "B for Blue", config.General.WindowSizeX-64, 30)
 		ebitenutil.DebugPrintAt(screen, "C for Cyan", config.General.WindowSizeX-64, 45)
 		ebitenutil.DebugPrintAt(screen, "Y for Yellow", config.General.WindowSizeX-75, 60)
 		ebitenutil.DebugPrintAt(screen, "P for Purple", config.General.WindowSizeX-75, 75)
-	} else {
-		ebitenutil.DebugPrintAt(screen, "RGB: Off", 6, 125)
+		ebitenutil.DebugPrintAt(screen, "M for Magenta", config.General.WindowSizeX-80, 90)
+		ebitenutil.DebugPrintAt(screen, "W for White", config.General.WindowSizeX-69, 105)
+		ebitenutil.DebugPrintAt(screen, "O for Orange", config.General.WindowSizeX-75, 120)
+		ebitenutil.DebugPrintAt(screen, "L for Lime", config.General.WindowSizeX-64, 135)
 	}
 }
 
-//Fonction qui affiche le bouton de Gravity
+// Fonction qui affiche le bouton de Gravity
 func DrawGravity(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -175,7 +186,7 @@ func DrawGravity(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de Bounce
+// Fonction qui affiche le bouton de Bounce
 func DrawBounce(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -206,7 +217,7 @@ func DrawBounce(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de Rotate
+// Fonction qui affiche le bouton de Rotate
 func DrawRotate(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
@@ -226,7 +237,7 @@ func DrawRotate(screen *ebiten.Image) {
 	}
 }
 
-//Fonction qui affiche le bouton de SpeedFix
+// Fonction qui affiche le bouton de SpeedFix
 func DrawSpeedFix(screen *ebiten.Image) {
 	//On créee une image de 110x30 pixels
 	button := ebiten.NewImage(110, 30)
