@@ -1,5 +1,5 @@
 {
-	"WindowTitle": "Particles",
+	"WindowTitle": "Rotate",
 	"WindowSizeX": 800,
 	"WindowSizeY": 600,
 	"ParticleImage": "assets/particle.png",
@@ -29,7 +29,7 @@
 	"GravityVal" : 0.5,
 	"Optimisation" : true,
 	"Fade" : true,
-	"SpawnAtMouse": false,
+	"SpawnAtMouse": true,
 	"SpawnPerClick": 1,
 	"RGBchange" : false,
 	"Bounce" : false,

@@ -70,7 +70,7 @@ func (s *System) Update() {
 			//Sinon, on fait rebondir la particule sur les rebords sans prendre en compte sa mort
 			p.Bounce()
 		}
-		if Extensions.Arrows {
+		if config.General.Arrows {
 			p.ColorRed, p.ColorGreen, p.ColorBlue = 1, 1, 1
 		}
 		//On passe à la particule suivante

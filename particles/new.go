@@ -100,7 +100,7 @@ func setSpeed() {
 }
 func setColor() {
 	//Si l'extention arrows est active, la couleur de base est rouge pour se reperer
-	if Extensions.Arrows {
+	if config.General.Arrows {
 		Red, Green, Blue = 1, 0, 0
 		//Sinon, on regarde si le Fade est actif pour définir la couleur en fonction de col, la durée du click
 	} else if Extensions.Fade {
@@ -161,7 +161,7 @@ func setSpawn() {
 		}
 	}
 	//Si l'extension Arrows est active, on change le point de spawn avec les flèches directionelles
-	if Extensions.Arrows {
+	if config.General.Arrows {
 		//PosX += 1 Si la touche droite est pressée
 		if ebiten.IsKeyPressed(ebiten.KeyRight) && PosX < float64(config.General.WindowSizeX)-10*config.General.ScaleX-10 {
 			PosX += 10
